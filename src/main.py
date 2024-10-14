@@ -1,12 +1,12 @@
 from controllers.Controller import Controller
-from models.Model import Model
+from models.Sheet import Sheet
 from views.Root import Root
 from views.View import View
 from views.ViewFacade import ViewFacade
 
 
 def main():
-    model = Model()
+    model = Sheet()
     root = Root()
     view = View(root)
     viewFacade = ViewFacade(view)

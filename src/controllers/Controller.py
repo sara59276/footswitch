@@ -1,3 +1,6 @@
+import os
+
+
 class Controller:
     def __init__(self, view_facade, model):
         self.model = model
@@ -11,6 +14,11 @@ class Controller:
         self.view.bind_buttons(self.start_command, self.reset_command)
 
     def start_command(self):
-        pass
+        self.model.initialize_sheet(
+            destination_folder=os.path.dirname(os.path.abspath(__file__)),
+            scan_id="scan123",
+            animal_id="a103000",
+        )
+
     def reset_command(self):
         pass
