@@ -15,6 +15,11 @@ class View(ttk.Frame):
     def start_mainloop(self):
         self.master.mainloop()
 
+    def update_sheet(self, data):
+        self.sheet.set_sheet_data([["" for _ in range(3)] for _ in range(1)])
+        self.sheet.headers(["event", "start_time", "end_time"])
+        self.sheet.readonly_columns([1, 2])
+
     def _initialize_value_vars(self):
         self.scan_value = StringVar()
         self.animal_value = StringVar()
@@ -73,9 +78,6 @@ class View(ttk.Frame):
 
     def _initialize_sheet(self):
         self.sheet = tksheet.Sheet(self.sheet_frame)
-        self.sheet.set_sheet_data([["" for _ in range(3)] for _ in range(1)])
-        self.sheet.headers(["event", "start_time", "end_time"])
-        self.sheet.readonly_columns([1, 2])
         self.sheet.enable_bindings("single_select",
                                "row_select",
                                "column_width_resize",

@@ -22,6 +22,12 @@ class Sheet:
 
         print(f"Created new file : {self.__filepath}")
 
+    def get_file_content(self):
+        with open(self.__filepath, mode='r', newline='') as file:
+            reader = csv.reader(file)
+            content = [row for row in reader]
+        return content
+
     def reset(self):
         self.__filepath = None
 

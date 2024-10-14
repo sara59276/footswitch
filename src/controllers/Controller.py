@@ -14,9 +14,9 @@ class Controller:
         self.view.start_mainloop()
 
     def _bind(self):
-        self.view.bind_widgets(self.start_command, self.reset_command)
+        self.view.bind_widgets(self.start_measures, self.reset_measures)
 
-    def start_command(self):
+    def start_measures(self):
         try:
             self.view.clear_error()
             scan_id, animal_id, experimenter_id = self.view.get_user_inputs()
@@ -26,6 +26,7 @@ class Controller:
                 animal_id=animal_id,
             )
             self.view.disable_user_inputs()
+            self.update_sheet()
         except FileExistsError as e:
             self.view.display_error(e)
         except ValueError as e:
@@ -34,8 +35,12 @@ class Controller:
             self.view.display_error(e)
             raise
 
-    def reset_command(self):
+    def reset_measures(self):
         # TODO add dialog "sure to reset ?"
         self.view.reset()
         self.model.reset()
         self.view.enable_user_inputs()
+
+    def update_sheet(self):
+        data = self.model.get_file_content()
+        self.view.update_sheet(data)

@@ -41,6 +41,9 @@ class ViewFacade:
         self.view.animal_entry.delete(0, tkinter.END)
         self.view.experimenter_entry.delete(0, tkinter.END)
 
+    def update_sheet(self, data):
+        self.view.update_sheet(data)
+
     def display_error(self, error_msg):
         self.view.error_value.set(error_msg)
 
