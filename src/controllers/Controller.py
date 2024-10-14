@@ -23,8 +23,11 @@ class Controller:
                 scan_id="scan123",
                 animal_id="a103000",
             )
+        except FileExistsError as e:
+            self.view.display_error(e)
         except Exception as e:
             self.view.display_error(e)
+            raise
 
     def reset_command(self):
         pass
