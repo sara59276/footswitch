@@ -32,5 +32,6 @@ pip freeze > requirements.txt
 ```
 ## How to generate the executable
 ```
-pyinstaller.exe --noconsole --onefile --name AIFGenerator .\src\main.py
+pip install pyinstaller
+pyinstaller.exe --noconsole --onefile --name FootSwitch .\src\main.py
 ```
