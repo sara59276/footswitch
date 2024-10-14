@@ -18,16 +18,24 @@ class Controller:
 
     def start_command(self):
         try:
+            self.view.clear_error()
+            scan_id, animal_id, experimenter_id = self.view.get_user_inputs()
             self.model.create_new_file(
                 destination_folder=os.path.dirname(os.path.abspath(__file__)),
-                scan_id="scan123",
-                animal_id="a103000",
+                scan_id=scan_id,
+                animal_id=animal_id,
             )
+            self.view.disable_user_inputs()
         except FileExistsError as e:
+            self.view.display_error(e)
+        except ValueError as e:
             self.view.display_error(e)
         except Exception as e:
             self.view.display_error(e)
             raise
 
     def reset_command(self):
-        pass
+        # TODO add dialog "sure to reset ?"
+        self.view.reset()
+        self.model.reset()
+        self.view.enable_user_inputs()
