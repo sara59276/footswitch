@@ -44,3 +44,7 @@ class Controller:
     def update_sheet(self):
         data = self.model.get_file_content()
         self.view.update_sheet(data)
+
+    def on_measure_completion(self):
+        measure_data = self.view.get_last_measure()
+        self.model.append_measure(measure_data)

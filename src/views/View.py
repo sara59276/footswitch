@@ -16,9 +16,11 @@ class View(ttk.Frame):
         self.master.mainloop()
 
     def update_sheet(self, data):
-        self.sheet.set_sheet_data([["" for _ in range(3)] for _ in range(1)])
-        self.sheet.headers(["event", "start_time", "end_time"])
+        self.sheet.set_sheet_data(data)
         self.sheet.readonly_columns([1, 2])
+
+    def add_empty_row(self):
+        pass
 
     def _initialize_value_vars(self):
         self.scan_value = StringVar()
@@ -93,6 +95,10 @@ class View(ttk.Frame):
                                "undo",
                                "edit_cell")
 
+    def on_event_completion(self):
+        row, col = self.sheet.get_currently_selected()
+        value = self.sheet.get_cell_data(row, col)
+
     def _initialize_control_buttons(self):
         self.start_btn = ttk.Button(
             self.control_frame,
@@ -132,3 +138,4 @@ class View(ttk.Frame):
         self.start_btn.grid(row=0, column=0, sticky="ew", padx=5)
         self.reset_btn.grid(row=1, column=0, sticky="ew", padx=5)
         self.error_label.grid(row=0, column=0, sticky="ew", padx=5)
+

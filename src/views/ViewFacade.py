@@ -44,6 +44,11 @@ class ViewFacade:
     def update_sheet(self, data):
         self.view.update_sheet(data)
 
+    def get_last_measure(self):
+        last_row_index = self.view.sheet.get_total_rows() - 1
+        row_content = self.view.sheet.get_row_data(last_row_index)
+        return row_content
+
     def display_error(self, error_msg):
         self.view.error_value.set(error_msg)
 

@@ -28,6 +28,11 @@ class Sheet:
             content = [row for row in reader]
         return content
 
+    def append_measure(self, measure_data):
+        with open(self.__filepath, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(measure_data)
+
     def reset(self):
         self.__filepath = None
 
