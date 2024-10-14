@@ -1,11 +1,13 @@
 from controllers.Controller import Controller
 from models.Model import Model
+from views.Root import Root
 from views.View import View
 
 
 def main():
     model = Model()
-    view = View()
+    root = Root()
+    view = View(root)
     controller = Controller(view, model)
     controller.start()
 
