@@ -51,11 +51,11 @@ class ViewFacade:
         row_content = self.view.sheet.get_row_data(last_row_index)
         return row_content
 
-    def display_disconnected_device(self):
+    def display_footswitch_disconnected(self):
         self.view.device_value.set("FootSwitch FS22 is disconnected")
         self.view.device_label.config(style="Red.TLabel")
 
-    def display_connected_device(self):
+    def display_footswitch_connected(self):
         self.view.device_value.set("FootSwitch FS22 is connected")
         self.view.device_label.config(style="Green.TLabel")
 

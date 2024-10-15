@@ -17,10 +17,10 @@ class View(ttk.Frame):
 
     def update_sheet(self, data):
         self.sheet.set_sheet_data(data)
-        self.sheet.readonly_columns([1, 2])
+        self.append_empty_row()
 
-    def add_empty_row(self):
-        pass
+    def append_empty_row(self):
+        self.sheet.insert_row()
 
     def _initialize_value_vars(self):
         self.scan_value = StringVar()
@@ -83,6 +83,14 @@ class View(ttk.Frame):
 
     def _initialize_sheet(self):
         self.sheet = tksheet.Sheet(self.sheet_frame)
+        self.sheet.readonly(
+            self.sheet.span("B:C"),
+            readonly=True,
+        )
+        self.sheet.readonly(
+            self.sheet.span("A1"),
+            readonly=True,
+        )
         self.sheet.enable_bindings("single_select",
                                "row_select",
                                "column_width_resize",

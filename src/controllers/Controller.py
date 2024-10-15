@@ -12,16 +12,16 @@ class Controller:
         self._bind()
 
     def start(self):
-        self.detect_device()
+        self.display_footswitch_connection()
         DeviceManager.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.view.start_mainloop()
 
     def _bind(self):
         self.view.bind_widgets(self.start_measures, self.reset_measures)
 
-    def detect_device(self):
+    def display_footswitch_connection(self):
         is_detected = DeviceManager.is_footswitch_connected()
-        self.view.display_connected_device() if is_detected else self.view.display_disconnected_device()
+        self.view.display_footswitch_connected() if is_detected else self.view.display_footswitch_disconnected()
 
     def start_measures(self):
         try:
@@ -62,7 +62,7 @@ class Controller:
         self.sheet.append_measure(measure_data)
 
     def on_device_connect(self, device_id, device_info):
-        self.view.display_connected_device()
+        self.view.display_footswitch_connected()
 
     def on_device_disconnect(self, device_id, device_info):
-        self.view.display_disconnected_device()
+        self.view.display_footswitch_disconnected()
