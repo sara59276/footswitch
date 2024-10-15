@@ -1,13 +1,31 @@
 from usbmonitor import USBMonitor
-from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID, ID_MODEL_FROM_DATABASE
+from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID, ID_MODEL_FROM_DATABASE, ID_MODEL
 
 from constants.footswitch_ids import FOOTSWITCH_FS22PM_MODEL_ID, FOOTSWITCH_FS22PM_VENDOR_ID
 
 
 class DeviceManager:
 
+    _monitor = USBMonitor()
+
     @staticmethod
-    def is_footswitch_plugged_in() -> bool:
+    def start_monitoring():
+        device_info_str = lambda \
+                device_info: f"{device_info[ID_MODEL]} ({device_info[ID_MODEL_ID]} - {device_info[ID_VENDOR_ID]})"
+        
+        # Define the `on_connect` and `on_disconnect` callbacks
+        on_connect = lambda device_id, device_info: print(f"Connected: {device_info_str(device_info=device_info)}")
+        on_disconnect = lambda device_id, device_info: print(
+            f"Disconnected: {device_info_str(device_info=device_info)}")
+
+        # Start the daemon
+        DeviceManager._monitor.start_monitoring(on_connect=on_connect, on_disconnect=on_disconnect)
+
+    def stop_monitoring(self):
+        DeviceManager._monitor.stop_monitoring()
+
+    @staticmethod
+    def is_footswitch_connected() -> bool:
         devices = DeviceManager.get_all_current_devices()
 
         for device_id, model_id, vendor_id in devices:
@@ -20,9 +38,5 @@ class DeviceManager:
     def get_all_current_devices():
         monitor = USBMonitor()
         devices_dict = monitor.get_available_devices()
-
         devices_list = [(key, value[ID_MODEL_ID], value[ID_VENDOR_ID]) for key, value in devices_dict.items()]
-
-        print("devices list:\n", devices_list)
-
         return devices_list

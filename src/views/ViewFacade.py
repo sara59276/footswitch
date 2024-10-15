@@ -51,6 +51,14 @@ class ViewFacade:
         row_content = self.view.sheet.get_row_data(last_row_index)
         return row_content
 
+    def display_disconnected_device(self):
+        self.view.device_value.set("FootSwitch FS22 is disconnected")
+        self.view.device_label.config(style="Red.TLabel")
+
+    def display_connected_device(self):
+        self.view.device_value.set("FootSwitch FS22 is connected")
+        self.view.device_label.config(style="Green.TLabel")
+
     def display_error(self, content):
         self.view.msg_value.set(content)
         self.view.msg_label.config(style="Red.TLabel")
