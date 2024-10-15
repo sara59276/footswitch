@@ -48,7 +48,7 @@ class View(ttk.Frame):
     def _initialize_scan(self):
         self.scan_label = ttk.Label(
             self.entries_frame,
-            text="Scan:",
+            text="Scan ID:",
         )
         self.scan_entry = Entry(
             self.entries_frame,
@@ -60,7 +60,7 @@ class View(ttk.Frame):
     def _initialize_animal(self):
         self.animal_label = ttk.Label(
             self.entries_frame,
-            text="Animal:",
+            text="Animal ID:",
         )
         self.animal_entry = Entry(
             self.entries_frame,
@@ -72,7 +72,7 @@ class View(ttk.Frame):
     def _initialize_experimenter(self):
         self.experimenter_label = ttk.Label(
             self.entries_frame,
-            text="Experimenter:",
+            text="Experimenter ID:",
         )
         self.experimenter_entry = Entry(
             self.entries_frame,
