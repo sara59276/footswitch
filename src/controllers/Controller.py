@@ -6,22 +6,21 @@ from views.ViewFacade import ViewFacade
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, sheet: Sheet, device_manager: DeviceManager):
+    def __init__(self, view: ViewFacade, sheet: Sheet):
         self.sheet = sheet
-        self.device_manager = device_manager
         self.view = view
         self._bind()
 
     def start(self):
         self.detect_device()
-        DeviceManager.start_monitoring()
+        DeviceManager.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.view.start_mainloop()
 
     def _bind(self):
         self.view.bind_widgets(self.start_measures, self.reset_measures)
 
     def detect_device(self):
-        is_detected = self.device_manager.is_footswitch_connected()
+        is_detected = DeviceManager.is_footswitch_connected()
         self.view.display_connected_device() if is_detected else self.view.display_disconnected_device()
 
     def start_measures(self):
@@ -61,3 +60,9 @@ class Controller:
     def on_measure_completion(self):
         measure_data = self.view.get_last_measure()
         self.sheet.append_measure(measure_data)
+
+    def on_device_connect(self, device_id, device_info):
+        self.view.display_connected_device()
+
+    def on_device_disconnect(self, device_id, device_info):
+        self.view.display_disconnected_device()

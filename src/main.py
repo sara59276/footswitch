@@ -8,11 +8,10 @@ from views.ViewFacade import ViewFacade
 
 def main():
     sheet = Sheet()
-    device_manager = DeviceManager()
     root = Root()
     view = View(root)
     viewFacade = ViewFacade(view)
-    controller = Controller(viewFacade, sheet, device_manager)
+    controller = Controller(viewFacade, sheet)
     controller.start()
 
 if __name__ == "__main__":
