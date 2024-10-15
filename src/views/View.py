@@ -26,13 +26,13 @@ class View(ttk.Frame):
         self.scan_value = StringVar()
         self.animal_value = StringVar()
         self.experimenter_value = StringVar()
-        self.error_value = StringVar()
+        self.msg_value = StringVar()
 
     def _initialize_frames(self):
         self.entries_frame = ttk.Frame(self)
         self.sheet_frame = ttk.Frame(self)
         self.control_frame = ttk.Frame(self)
-        self.error_frame = ttk.Frame(self)
+        self.msg_frame = ttk.Frame(self)
 
     def _initialize_widgets(self):
         self._initialize_scan()
@@ -40,7 +40,7 @@ class View(ttk.Frame):
         self._initialize_experimenter()
         self._initialize_sheet()
         self._initialize_control_buttons()
-        self._initialize_error_label()
+        self._initialize_msg_label()
 
     def _initialize_scan(self):
         self.scan_label = ttk.Label(
@@ -111,21 +111,17 @@ class View(ttk.Frame):
         for button in (self.start_btn, self.reset_btn):
             button.config(width=15, padding=30)
 
-    def _initialize_error_label(self):
-        style = ttk.Style()
-        style.configure("Red.TLabel", foreground="red")
-
-        self.error_label = ttk.Label(
-            self.error_frame,
-            textvariable=self.error_value,
-            style="Red.TLabel"
+    def _initialize_msg_label(self):
+        self.msg_label = ttk.Label(
+            self.msg_frame,
+            textvariable=self.msg_value,
         )
 
     def _display_frames(self):
         self.entries_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.sheet_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
         self.control_frame.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
-        self.error_frame.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
+        self.msg_frame.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
 
     def _display_widgets(self):
         self.scan_label.grid(row=0, column=0, sticky="e", padx=5)
@@ -137,5 +133,5 @@ class View(ttk.Frame):
         self.sheet.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.start_btn.grid(row=0, column=0, sticky="ew", padx=5)
         self.reset_btn.grid(row=1, column=0, sticky="ew", padx=5)
-        self.error_label.grid(row=0, column=0, sticky="ew", padx=5)
+        self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
 

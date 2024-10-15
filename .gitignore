@@ -1,5 +1,6 @@
-*.csv
+src/test.py
 
+*.csv
 .idea/
 *.spec
 

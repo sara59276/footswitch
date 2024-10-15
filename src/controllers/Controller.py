@@ -20,11 +20,16 @@ class Controller:
         try:
             self.view.clear_error()
             scan_id, animal_id, experimenter_id = self.view.get_user_inputs()
-            self.model.create_new_file(
+            file_path = self.model.create_new_file(
                 destination_folder=os.path.dirname(os.path.abspath(__file__)),
                 scan_id=scan_id,
                 animal_id=animal_id,
             )
+            if file_path:
+                self.view.display_success(f"File created : {file_path}")
+            else:
+                self.view.display_error(f"File not created.")
+
             self.view.disable_user_inputs()
             self.update_sheet()
         except FileExistsError as e:

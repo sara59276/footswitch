@@ -21,6 +21,7 @@ class Sheet:
             writer.writerow(column_names)
 
         print(f"Created new file : {self.__filepath}")
+        return self.__filepath
 
     def get_file_content(self):
         with open(self.__filepath, mode='r', newline='') as file:

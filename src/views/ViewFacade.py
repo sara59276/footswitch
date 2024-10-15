@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import ttk
 
 from views.View import View
 
@@ -6,6 +7,7 @@ from views.View import View
 class ViewFacade:
     def __init__(self, view: View):
         self.view = view
+        self._initialize_styles()
 
     def start_mainloop(self):
         self.view.start_mainloop()
@@ -49,16 +51,26 @@ class ViewFacade:
         row_content = self.view.sheet.get_row_data(last_row_index)
         return row_content
 
-    def display_error(self, error_msg):
-        self.view.error_value.set(error_msg)
+    def display_error(self, content):
+        self.view.msg_value.set(content)
+        self.view.msg_label.config(style="Red.TLabel")
+
+    def display_success(self, content):
+        self.view.msg_value.set(content)
+        self.view.msg_label.config(style="Green.TLabel")
 
     def clear_error(self):
-        self.view.error_value.set("")
+        self.view.msg_value.set("")
 
     def reset(self):
         self.reset_user_inputs()
         self.view.sheet.reset()
-        self.view.error_value.set("")
+        self.view.msg_value.set("")
+
+    def _initialize_styles(self):
+        style = ttk.Style()
+        style.configure("Red.TLabel", foreground="red")
+        style.configure("Green.TLabel", foreground="green")
 
 # TODO - in another class ?
 def is_empty(string) -> bool:
