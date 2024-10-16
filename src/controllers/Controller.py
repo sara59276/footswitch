@@ -43,11 +43,11 @@ class Controller:
             self.view.disable_user_inputs()
             self.update_sheet()
         except FileExistsError as e:
-            self.view.display_error(e)
+            self.view.display_error(str(e))
         except ValueError as e:
-            self.view.display_error(e)
+            self.view.display_error(str(e))
         except Exception as e:
-            self.view.display_error(e)
+            self.view.display_error(str(e))
             raise
 
     def reset_measures(self) -> None:
