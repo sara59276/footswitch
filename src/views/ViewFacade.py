@@ -39,6 +39,7 @@ class ViewFacade:
         self.view.experimenter_entry.config(state="disabled")
 
     def reset_user_inputs(self) -> None:
+        self.enable_user_inputs()
         self.view.scan_entry.delete(0, tkinter.END)
         self.view.animal_entry.delete(0, tkinter.END)
         self.view.experimenter_entry.delete(0, tkinter.END)
