@@ -2,12 +2,12 @@ import os
 
 from models.DeviceManager import DeviceManager
 from models.FootSwitchListener import FootSwitchListener
-from models.Sheet import Sheet
+from models.DataSheet import DataSheet
 from views.ViewFacade import ViewFacade
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, sheet: Sheet):
+    def __init__(self, view: ViewFacade, sheet: DataSheet):
         self.sheet = sheet
         self.view = view
         self._bind()
@@ -20,7 +20,14 @@ class Controller:
         self.view.start_mainloop()
 
     def _bind(self) -> None:
-        self.view.bind_widgets(self.start_measures, self.reset_measures)
+        self.view.bind_widgets(
+            self.start_measures,
+            self.reset_measures,
+        )
+        self.view.bind_footswitch(
+            self.footswitch_pressed,
+            self.footswitch_released,
+        )
 
     def display_footswitch_connection(self) -> None:
         is_detected = DeviceManager.is_footswitch_connected()
@@ -28,7 +35,7 @@ class Controller:
 
     def start_measures(self) -> None:
         try:
-            self.view.clear_error()
+            self.view.clear_msg()
             scan_id, animal_id, experimenter_id = self.view.get_user_inputs()
             file_path = self.sheet.create_new_file(
                 destination_folder=os.path.dirname(os.path.abspath(__file__)),
@@ -56,13 +63,20 @@ class Controller:
         self.sheet.reset()
         self.view.enable_user_inputs()
 
+    def footswitch_pressed(self, event) -> None:
+        print("Footswitch pressed")
+
+
+    def footswitch_released(self, event) -> None:
+        print("Footswitch released")
+
     def update_sheet(self) -> None:
         data = self.sheet.get_file_content()
         self.view.update_sheet(data)
 
     def on_measure_completion(self) -> None:
         measure_data = self.view.get_last_measure()
-        self.sheet.append_measure(measure_data)
+        self.sheet.append_measure_row(measure_data)
 
     def on_device_connect(self, device_id, device_info) -> None:
         self.view.display_footswitch_connected()

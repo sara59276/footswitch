@@ -16,6 +16,10 @@ class ViewFacade:
         self.view.start_btn.config(command=start_command)
         self.view.reset_btn.config(command=reset_command)
 
+    def bind_footswitch(self, footswitch_pressed, footswitch_released) -> None:
+        self.view.master.bind("&", footswitch_pressed)
+        self.view.master.bind("<KeyRelease-&>", footswitch_released)
+
     def get_user_inputs(self) -> tuple[str, str, str]:
         if is_empty(self.view.scan_value.get()):
             raise ValueError("Scan ID is empty")
@@ -68,12 +72,12 @@ class ViewFacade:
         self.view.msg_value.set(content)
         self.view.msg_label.config(style="Green.TLabel")
 
-    def clear_error(self) -> None:
+    def clear_msg(self) -> None:
         self.view.msg_value.set("")
 
     def reset_view(self) -> None:
         self.reset_user_inputs()
-        self.view.sheet.reset_view()
+        self.view.sheet.reset()
         self.view.msg_value.set("")
 
     def _initialize_styles(self) -> None:

@@ -2,8 +2,10 @@ import csv
 import os
 from datetime import datetime
 
+from models.MeasureRow import MeasureRow
 
-class Sheet:
+
+class DataSheet:
     def __init__(self):
         self.__filepath = None
 
@@ -29,10 +31,10 @@ class Sheet:
             content = [row for row in reader]
         return content
 
-    def append_measure(self, measure_data) -> None: # TODO add measure_data variable type
+    def append_measure_row(self, measure_row: MeasureRow) -> None: # TODO add measure_data variable type
         with open(self.__filepath, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(measure_data)
+            writer.writerow(measure_row)
 
     def reset(self) -> None:
         self.__filepath = None
