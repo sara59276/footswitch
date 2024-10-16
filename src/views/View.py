@@ -98,7 +98,6 @@ class View(ttk.Frame):
                                "row_select",
                                "column_width_resize",
                                "arrowkeys",
-                               "right_click_popup_menu",
                                "rc_select",
                                "rc_insert_row",
                                "rc_delete_row",
