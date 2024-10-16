@@ -7,7 +7,7 @@ class Sheet:
     def __init__(self):
         self.__filepath = None
 
-    def create_new_file(self, destination_folder, scan_id, animal_id):
+    def create_new_file(self, destination_folder, scan_id, animal_id) -> str:
         filepath = self._get_filepath(destination_folder, scan_id, animal_id)
 
         if os.path.exists(filepath):
@@ -23,21 +23,21 @@ class Sheet:
         print(f"Created new file : {self.__filepath}")
         return self.__filepath
 
-    def get_file_content(self):
+    def get_file_content(self) ->  list[list[str]]:
         with open(self.__filepath, mode='r', newline='') as file:
             reader = csv.reader(file)
             content = [row for row in reader]
         return content
 
-    def append_measure(self, measure_data):
+    def append_measure(self, measure_data) -> None:
         with open(self.__filepath, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(measure_data)
 
-    def reset(self):
+    def reset(self) -> None:
         self.__filepath = None
 
-    def _get_filepath(self, destination_folder, scan_id, animal_id):
+    def _get_filepath(self, destination_folder, scan_id, animal_id) -> str:
         current_date = datetime.now().strftime("%Y%m%d")
         file_name = f"{scan_id}_{animal_id}_{current_date}.csv"
         return os.path.join(destination_folder, file_name)
