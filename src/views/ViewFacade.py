@@ -59,11 +59,11 @@ class ViewFacade:
         self.view.device_value.set("FootSwitch FS22 is connected")
         self.view.device_label.config(style="Green.TLabel")
 
-    def display_error(self, content) -> None:
+    def display_error(self, content: str) -> None:
         self.view.msg_value.set(content)
         self.view.msg_label.config(style="Red.TLabel")
 
-    def display_success(self, content) -> None:
+    def display_success(self, content: str) -> None:
         self.view.msg_value.set(content)
         self.view.msg_label.config(style="Green.TLabel")
 
@@ -81,5 +81,5 @@ class ViewFacade:
         style.configure("Green.TLabel", foreground="green")
 
 # TODO - in another class ?
-def is_empty(string) -> bool:
+def is_empty(string: str) -> bool:
     return True if len(string) == 0 else False
