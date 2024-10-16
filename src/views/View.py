@@ -2,6 +2,7 @@ from tkinter import ttk, StringVar, Entry
 
 import tksheet
 
+
 class View(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
@@ -28,7 +29,6 @@ class View(ttk.Frame):
         self.experimenter_value = StringVar()
         self.device_value = StringVar()
         self.msg_value = StringVar()
-        self.timer_value = StringVar()
 
     def _initialize_frames(self) -> None:
         self.entries_frame = ttk.Frame(self)
@@ -36,7 +36,6 @@ class View(ttk.Frame):
         self.control_frame = ttk.Frame(self)
         self.device_frame = ttk.Frame(self)
         self.msg_frame = ttk.Frame(self)
-        self.timer_frame = ttk.Frame(self)
 
     def _initialize_widgets(self) -> None:
         self._initialize_scan()
@@ -46,7 +45,6 @@ class View(ttk.Frame):
         self._initialize_control_buttons()
         self._initialize_device_label()
         self._initialize_msg_label()
-        self._initialize_timer_label()
 
     def _initialize_scan(self) -> None:
         self.scan_label = ttk.Label(
@@ -132,19 +130,12 @@ class View(ttk.Frame):
             textvariable=self.msg_value,
         )
 
-    def _initialize_timer_label(self):
-        self.timer_label = ttk.Label(
-            self.timer_frame,
-            textvariable=self.timer_value,
-        )
-
     def _display_frames(self) -> None:
         self.entries_frame.grid(row=0, column=0)
         self.sheet_frame.grid(row=1, column=0)
         self.control_frame.grid(row=1, column=1)
         self.device_frame.grid(row=2, column=0)
         self.msg_frame.grid(row=3, column=0)
-        self.timer_frame.grid(row=4, column=0)
 
         for frame in self.winfo_children():
             frame.grid(sticky="nsew", padx=20, pady=20)
@@ -161,5 +152,4 @@ class View(ttk.Frame):
         self.reset_btn.grid(row=1, column=0, sticky="ew", padx=5)
         self.device_label.grid(row=0, column=0, sticky="ew", padx=5)
         self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
-        self.timer_label.grid(row=0, column=0, sticky="ew", padx=5)
 

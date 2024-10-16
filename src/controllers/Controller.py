@@ -52,7 +52,7 @@ class Controller:
 
     def reset_measures(self) -> None:
         # TODO add dialog "sure to reset ?"
-        self.view.reset()
+        self.view.reset_view()
         self.sheet.reset()
         self.view.enable_user_inputs()
 

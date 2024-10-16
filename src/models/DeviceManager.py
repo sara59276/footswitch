@@ -1,5 +1,5 @@
 from usbmonitor import USBMonitor
-from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID, ID_MODEL
+from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID
 
 from constants.footswitch_ids import FOOTSWITCH_FS22PM_PRODUCT_ID_STR, FOOTSWITCH_FS22PM_VENDOR_ID_STR
 

@@ -71,9 +71,9 @@ class ViewFacade:
     def clear_error(self) -> None:
         self.view.msg_value.set("")
 
-    def reset(self) -> None:
+    def reset_view(self) -> None:
         self.reset_user_inputs()
-        self.view.sheet.reset()
+        self.view.sheet.reset_view()
         self.view.msg_value.set("")
 
     def _initialize_styles(self) -> None:

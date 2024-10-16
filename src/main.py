@@ -1,5 +1,4 @@
 from controllers.Controller import Controller
-from models.DeviceManager import DeviceManager
 from models.Sheet import Sheet
 from views.Root import Root
 from views.View import View
