@@ -1,11 +1,12 @@
 from datetime import time
+from typing import Optional
 
 
 class MeasureRow:
     def __init__(self):
-        self.__event = None
-        self.__start_time = None
-        self.__end_time = None
+        self.__event: Optional[str] = None
+        self.__start_time: Optional[time] = None
+        self.__end_time: Optional[time] = None
 
     def get_event(self) -> str:
         return self.__event
@@ -25,5 +26,9 @@ class MeasureRow:
     def set_end_datetime(self, end_datetime) -> None:
         self.__end_time = end_datetime
 
-    def get_all_for_csv(self) -> str:
-        return f"{self.__event},{self.__start_time},{self.__end_time}"
+    def get_row(self) -> list[str]:
+        return [
+            self.__event,
+            self.__start_time,
+            self.__end_time
+        ]

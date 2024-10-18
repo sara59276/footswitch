@@ -1,45 +1,26 @@
-import csv
-import os
-from datetime import datetime
-
-from models.MeasureRow import MeasureRow
+from models import MeasureRow
+from models.FileManager import FileManager
 
 
 class DataSheet:
+
+    HEADER = ["event", "start_time", "end_time"]
+
     def __init__(self):
-        self.__filepath = None
+        self.__filepath= None
 
-    def create_new_file(self, destination_folder: str, scan_id: str, animal_id: str) -> str:
-        filepath = self._get_filepath(destination_folder, scan_id, animal_id)
-
-        if os.path.exists(filepath):
-            raise FileExistsError(f"The file already exists: {filepath}")
-
+    def initialize(self, filepath: str) -> None:
         self.__filepath = filepath
+        FileManager.create_new_empty_file(filepath)
+        FileManager.append_row(filepath, DataSheet.HEADER)
 
-        column_names = ["event", "start_time", "end_time"]
-        with open(self.__filepath, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(column_names)
+    def get_data(self):
+        return FileManager.get_content(self.__filepath)
 
-        print(f"Created new file : {self.__filepath}")
-        return self.__filepath
+    def append_measure_row(self, measure_row: MeasureRow) -> None:
+        FileManager.append_row(self.__filepath, measure_row.get_row())
 
-    def get_file_content(self) ->  list[list[str]]:
-        with open(self.__filepath, mode='r', newline='') as file:
-            reader = csv.reader(file)
-            content = [row for row in reader]
-        return content
-
-    def append_measure_row(self, measure_row: MeasureRow) -> None: # TODO add measure_data variable type
-        with open(self.__filepath, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(measure_row)
-
-    def reset(self) -> None:
+    def reset(self):
         self.__filepath = None
 
-    def _get_filepath(self, destination_folder: str, scan_id: str, animal_id: str) -> str:
-        current_date = datetime.now().strftime("%Y%m%d")
-        file_name = f"{scan_id}_{animal_id}_{current_date}.csv"
-        return os.path.join(destination_folder, file_name)
+

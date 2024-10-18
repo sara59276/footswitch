@@ -1,7 +1,6 @@
 from tkinter import Tk
 
-from constants.app_info import APP_TITLE
-from constants.layout_configurations import WINDOW_START_WIDTH, WINDOW_START_HEIGHT, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT
+from constants.ui_config import WINDOW_START_WIDTH, WINDOW_START_HEIGHT, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT, APP_TITLE
 
 
 class Root(Tk):

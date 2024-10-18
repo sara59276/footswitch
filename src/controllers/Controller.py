@@ -1,14 +1,13 @@
-import os
-
 from models.DeviceManager import DeviceManager
+from models.FileManager import FileManager
 from models.FootSwitchListener import FootSwitchListener
 from models.DataSheet import DataSheet
 from views.ViewFacade import ViewFacade
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, sheet: DataSheet):
-        self.sheet = sheet
+    def __init__(self, view: ViewFacade, data_sheet: DataSheet):
+        self.data_sheet = data_sheet
         self.view = view
         self._bind()
 
@@ -37,13 +36,14 @@ class Controller:
         try:
             self.view.clear_msg()
             scan_id, animal_id, experimenter_id = self.view.get_user_inputs()
-            file_path = self.sheet.create_new_file(
-                destination_folder=os.path.dirname(os.path.abspath(__file__)),
+            filepath = FileManager.create_filepath(
+                destination_folder=FileManager.get_destination_folder(),
                 scan_id=scan_id,
                 animal_id=animal_id,
             )
-            if file_path:
-                self.view.display_success(f"File created : {file_path}")
+            self.data_sheet.initialize(filepath)
+            if filepath:
+                self.view.display_success(f"File created : {filepath}")
             else:
                 self.view.display_error(f"File not created.")
 
@@ -60,7 +60,7 @@ class Controller:
     def reset_measures(self) -> None:
         # TODO add dialog "sure to reset ?"
         self.view.reset_view()
-        self.sheet.reset()
+        self.data_sheet.reset()
         self.view.enable_user_inputs()
 
     def footswitch_pressed(self, event) -> None:
@@ -71,12 +71,8 @@ class Controller:
         print("Footswitch released")
 
     def update_sheet(self) -> None:
-        data = self.sheet.get_file_content()
+        data = self.data_sheet.get_data()
         self.view.update_sheet(data)
-
-    def on_measure_completion(self) -> None:
-        measure_data = self.view.get_last_measure()
-        self.sheet.append_measure_row(measure_data)
 
     def on_device_connect(self, device_id, device_info) -> None:
         self.view.display_footswitch_connected()
