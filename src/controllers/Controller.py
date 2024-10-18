@@ -1,3 +1,5 @@
+import re
+
 from models.DeviceManager import DeviceManager
 from models.FileManager import FileManager
 from models.FootSwitchListener import FootSwitchListener
@@ -27,6 +29,9 @@ class Controller:
             self.footswitch_pressed,
             self.footswitch_released,
         )
+        self.view.bind_entry_constraints(
+            self.validate_experimenter_input,
+        )
 
     def display_footswitch_connection(self) -> None:
         is_detected = DeviceManager.is_footswitch_connected()
@@ -35,11 +40,12 @@ class Controller:
     def start_measures(self) -> None:
         try:
             self.view.clear_msg()
-            scan_id, animal_id, experimenter_id = self.view.get_user_inputs()
+            scan_id, animal_id, experimenter_initials = self.view.get_user_inputs()
             filepath = FileManager.create_filepath(
                 destination_folder=FileManager.get_destination_folder(),
                 scan_id=scan_id,
                 animal_id=animal_id,
+                experimenter_initials=experimenter_initials.upper()
             )
             self.data_sheet.initialize(filepath)
             if filepath:
@@ -69,6 +75,10 @@ class Controller:
 
     def footswitch_released(self, event) -> None:
         print("Footswitch released")
+
+    def validate_experimenter_input(self, value):
+        pattern = r'^[A-Za-z]+$'
+        return bool(re.fullmatch(pattern, value))
 
     def update_sheet(self) -> None:
         data = self.data_sheet.get_data()

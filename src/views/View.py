@@ -73,7 +73,7 @@ class View(ttk.Frame):
     def _initialize_experimenter(self) -> None:
         self.experimenter_label = ttk.Label(
             self.entries_frame,
-            text="Experimenter ID:",
+            text="Experimenter initials:",
         )
         self.experimenter_entry = Entry(
             self.entries_frame,

@@ -20,6 +20,11 @@ class ViewFacade:
         self.view.master.bind("&", footswitch_pressed)
         self.view.master.bind("<KeyRelease-&>", footswitch_released)
 
+    def bind_entry_constraints(self, validate_experimenter_input) -> None:
+        # self.view.experimenter_value.trace("w", validate_experimenter_input)
+        validate_command = (self.view.register(validate_experimenter_input), "%S")
+        self.view.experimenter_entry.config(validatecommand=validate_command)
+
     def get_user_inputs(self) -> tuple[str, str, str]:
         if is_empty(self.view.scan_value.get()):
             raise ValueError("Scan ID is empty")

@@ -37,9 +37,9 @@ class FileManager:
         return content
 
     @staticmethod
-    def create_filepath(destination_folder: str, scan_id: str, animal_id: str) -> str:
+    def create_filepath(destination_folder: str, scan_id: str, animal_id: str, experimenter_initials: str) -> str:
         current_date = datetime.now().strftime("%Y%m%d")
-        file_name = f"{scan_id}_{animal_id}_{current_date}.csv"
+        file_name = f"{scan_id}_{animal_id}_{experimenter_initials}_{current_date}.csv"
         return os.path.join(destination_folder, file_name)
 
     @staticmethod
