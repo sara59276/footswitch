@@ -21,7 +21,6 @@ class ViewFacade:
         self.view.master.bind("<KeyRelease-&>", footswitch_released)
 
     def bind_entry_constraints(self, validate_experimenter_input) -> None:
-        # self.view.experimenter_value.trace("w", validate_experimenter_input)
         validate_command = (self.view.register(validate_experimenter_input), "%S")
         self.view.experimenter_entry.config(validatecommand=validate_command)
 
@@ -32,6 +31,8 @@ class ViewFacade:
             raise ValueError("Animal ID is empty")
         if is_empty(self.view.experimenter_value.get()):
             raise ValueError("Experimenter ID is empty")
+        if is_invalid_initials(self.view.experimenter_value.get()):
+            raise ValueError("Experimenter initials should be of length 2 to 3")
 
         return (self.view.scan_value.get(),
                 self.view.animal_value.get(),
@@ -93,3 +94,6 @@ class ViewFacade:
 # TODO - in another class ?
 def is_empty(string: str) -> bool:
     return True if len(string) == 0 else False
+
+def is_invalid_initials(string: str) -> bool:
+    return not (2 <= len(string) <= 3)
