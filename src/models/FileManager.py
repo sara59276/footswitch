@@ -6,7 +6,7 @@ from datetime import datetime
 class FileManager:
 
     @staticmethod
-    def create_new_empty_file(filepath: str) -> bool:
+    def create_new_empty_file(filepath: str) -> None:
         directory = os.path.dirname(filepath)
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -20,14 +20,10 @@ class FileManager:
             raise FileExistsError(f"The file already exists: {filepath}")
 
     @staticmethod
-    def append_row(filepath: str, row_content: list[str]) -> None: # TODO add measure_data variable type
+    def append(filepath: str, content) -> None:
         with open(filepath, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(row_content)
-
-    @staticmethod
-    def update_row(filepath: str, row_content: str, row_index: int) -> None:
-        pass
+            writer.writerow(content)
 
     @staticmethod
     def get_content(filepath) ->  list[list[str]]:
@@ -50,3 +46,8 @@ class FileManager:
         current_month = str(datetime.now().month).zfill(2)
         current_day = str(datetime.now().day).zfill(2)
         return os.path.join(app_data_directory, current_year, current_month, current_day)
+
+    @staticmethod
+    def clear(filepath) -> None:
+        with open(filepath, 'w'):
+            pass

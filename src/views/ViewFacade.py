@@ -28,6 +28,9 @@ class ViewFacade:
         validate_initials = (self.view.register(validate_experimenter_input), "%S")
         self.view.experimenter_entry.config(validatecommand=validate_initials)
 
+    def bind_sheet(self, on_sheet_modified):
+        self.view.sheet.bind("<<SheetModified>>", on_sheet_modified)
+
     def get_user_inputs(self) -> tuple[str, str, str]:
         if is_empty(self.view.scan_value.get()):
             raise ValueError("Scan ID is empty")
@@ -58,7 +61,29 @@ class ViewFacade:
         self.view.animal_entry.delete(0, tkinter.END)
         self.view.experimenter_entry.delete(0, tkinter.END)
 
-    def update_sheet(self, data) -> None:
+    def add_start_time(self, start_time):
+        start_time_col = "B"
+        last_row_index = self.view.sheet.get_total_rows()
+        start_time_cell = f"{start_time_col}{last_row_index}"
+        print(start_time_cell)
+        self.view.sheet.span(start_time_cell).data = [start_time]
+
+    def add_end_time(self, end_time):
+        end_time_col = "C"
+        last_row_index = self.view.sheet.get_total_rows()
+        start_time_cell = f"{end_time_col}{last_row_index}"
+        self.view.sheet.span(start_time_cell).data = [end_time]
+        self.view.append_empty_row()
+
+    def set_sheet(self, data) -> None:
+        self.view.sheet.readonly(
+            self.view.sheet.span("B:C"),
+            readonly=True,
+        )
+        self.view.sheet.readonly(
+            self.view.sheet.span("A1"),
+            readonly=True,
+        )
         self.view.update_sheet(data)
 
     def get_last_measure(self) -> list[object]:
@@ -89,6 +114,9 @@ class ViewFacade:
         self.reset_user_inputs()
         self.view.sheet.reset()
         self.view.msg_value.set("")
+
+    def get_sheet_content(self) -> object:
+        return self.view.sheet.get_data()
 
     def _initialize_styles(self) -> None:
         style = ttk.Style()

@@ -84,26 +84,16 @@ class View(ttk.Frame):
 
     def _initialize_sheet(self) -> None:
         self.sheet = tksheet.Sheet(self.sheet_frame)
-        self.sheet.readonly(
-            self.sheet.span("B:C"),
-            readonly=True,
-        )
-        self.sheet.readonly(
-            self.sheet.span("A1"),
-            readonly=True,
-        )
         self.sheet.enable_bindings("single_select",
                                "row_select",
                                "column_width_resize",
                                "arrowkeys",
                                "rc_select",
-                               "rc_delete_row",
                                "copy",
-                               "cut",
                                "paste",
-                               "delete",
                                "undo",
-                               "edit_cell")
+                               "edit_cell"
+        )
 
     def _initialize_control_buttons(self) -> None:
         self.start_btn = ttk.Button(

@@ -1,7 +1,7 @@
 from usbmonitor import USBMonitor
 from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID
 
-from constants.footswitch_device_ids import FOOTSWITCH_FS22PM_PRODUCT_ID_STR, FOOTSWITCH_FS22PM_VENDOR_ID_STR
+from constants.footswitch_device import FOOTSWITCH_FS22PM_PRODUCT_ID_STR, FOOTSWITCH_FS22PM_VENDOR_ID_STR
 
 
 class DeviceManager:

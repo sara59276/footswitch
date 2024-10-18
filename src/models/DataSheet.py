@@ -1,4 +1,3 @@
-from models import MeasureRow
 from models.FileManager import FileManager
 
 
@@ -12,13 +11,14 @@ class DataSheet:
     def initialize(self, filepath: str) -> None:
         self.__filepath = filepath
         FileManager.create_new_empty_file(filepath)
-        FileManager.append_row(filepath, DataSheet.HEADER)
+        FileManager.append(filepath, DataSheet.HEADER)
 
-    def get_data(self):
+    def get_data_from_file(self):
         return FileManager.get_content(self.__filepath)
 
-    def append_measure_row(self, measure_row: MeasureRow) -> None:
-        FileManager.append_row(self.__filepath, measure_row.get_row())
+    def update(self, data) -> None:
+        FileManager.clear(self.__filepath)
+        FileManager.append(self.__filepath, data)
 
     def reset(self):
         self.__filepath = None
