@@ -117,3 +117,5 @@ class Controller:
 
     def on_close_window_button(self) -> None:
         self.__data_sheet.set_readonly()
+        root = self.__view.get_root()
+        root.destroy()

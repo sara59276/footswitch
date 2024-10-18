@@ -6,6 +6,7 @@ import tksheet
 class View(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
+        self.__container = container
         self.grid(sticky="nsew")
         self._initialize_value_vars()
         self._initialize_frames()
@@ -15,6 +16,9 @@ class View(ttk.Frame):
 
     def start_mainloop(self) -> None:
         self.master.mainloop()
+
+    def get_root(self):
+        return self.__container
 
     def set_sheet(self, data) -> None:
         self.sheet.set_sheet_data(data)

@@ -122,6 +122,9 @@ class ViewFacade:
     def get_sheet_content(self) -> object:
         return self.view.sheet.get_data()
 
+    def get_root(self):
+        return self.view.get_root()
+
     def _initialize_styles(self) -> None:
         style = ttk.Style()
         style.configure("Red.TLabel", foreground="red")

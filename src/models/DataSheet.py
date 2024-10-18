@@ -17,12 +17,14 @@ class DataSheet:
         return FileManager.get_content(self.__filepath)
 
     def update(self, data) -> None:
-        FileManager.clear(self.__filepath)
-        FileManager.append(self.__filepath, data)
+        if self.__filepath is not None:
+            FileManager.clear(self.__filepath)
+            FileManager.append(self.__filepath, data)
 
     def reset(self):
         self.__filepath = None
 
     def set_readonly(self):
-        FileManager.set_readonly(self.__filepath)
+        if self.__filepath is not None:
+            FileManager.set_readonly(self.__filepath)
 
