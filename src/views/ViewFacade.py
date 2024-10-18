@@ -20,9 +20,13 @@ class ViewFacade:
         self.view.master.bind("&", footswitch_pressed)
         self.view.master.bind("<KeyRelease-&>", footswitch_released)
 
-    def bind_entry_constraints(self, validate_experimenter_input) -> None:
-        validate_command = (self.view.register(validate_experimenter_input), "%S")
-        self.view.experimenter_entry.config(validatecommand=validate_command)
+    def bind_entry_constraints(self, validate_scan_and_animal_inputs, validate_experimenter_input) -> None:
+        validate_file_compatible = (self.view.register(validate_scan_and_animal_inputs), "%S")
+        self.view.scan_entry.config(validatecommand=validate_file_compatible)
+        self.view.animal_entry.config(validatecommand=validate_file_compatible)
+
+        validate_initials = (self.view.register(validate_experimenter_input), "%S")
+        self.view.experimenter_entry.config(validatecommand=validate_initials)
 
     def get_user_inputs(self) -> tuple[str, str, str]:
         if is_empty(self.view.scan_value.get()):

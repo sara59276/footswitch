@@ -27,6 +27,7 @@ class Controller:
             self.footswitch_released,
         )
         self.view.bind_entry_constraints(
+            self.validate_scan_and_animal_inputs,
             self.validate_experimenter_input,
         )
 
@@ -67,9 +68,12 @@ class Controller:
     def footswitch_pressed(self, event) -> None:
         print("Footswitch pressed")
 
-
     def footswitch_released(self, event) -> None:
         print("Footswitch released")
+
+    def validate_scan_and_animal_inputs(self, value):
+        pattern = r'^[\w]+$'
+        return bool(re.fullmatch(pattern, value))
 
     def validate_experimenter_input(self, value):
         pattern = r'^[A-Za-z]+$'
