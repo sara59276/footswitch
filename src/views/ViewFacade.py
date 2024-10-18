@@ -18,7 +18,7 @@ class ViewFacade:
         self.view.reset_btn.config(command=reset_command)
 
     def bind_footswitch(self, footswitch_pressed, footswitch_released) -> None:
-        self.view.master.bind(FOOTSWITCH_KEY_SIMULATOR, footswitch_pressed)
+        self.view.master.bind(f"<{FOOTSWITCH_KEY_SIMULATOR}>", footswitch_pressed)
         self.view.master.bind(f"<KeyRelease-{FOOTSWITCH_KEY_SIMULATOR}>", footswitch_released)
 
     def bind_entry_constraints(self, validate_scan_and_animal_inputs, validate_experimenter_input) -> None:
