@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import ttk
 
+from constants.footswitch_device import FOOTSWITCH_KEY_SIMULATOR
 from views.View import View
 
 
@@ -17,8 +18,8 @@ class ViewFacade:
         self.view.reset_btn.config(command=reset_command)
 
     def bind_footswitch(self, footswitch_pressed, footswitch_released) -> None:
-        self.view.master.bind("&", footswitch_pressed)
-        self.view.master.bind("<KeyRelease-&>", footswitch_released)
+        self.view.master.bind(FOOTSWITCH_KEY_SIMULATOR, footswitch_pressed)
+        self.view.master.bind(f"<KeyRelease-{FOOTSWITCH_KEY_SIMULATOR}>", footswitch_released)
 
     def bind_entry_constraints(self, validate_scan_and_animal_inputs, validate_experimenter_input) -> None:
         validate_file_compatible = (self.view.register(validate_scan_and_animal_inputs), "%S")
@@ -28,8 +29,11 @@ class ViewFacade:
         validate_initials = (self.view.register(validate_experimenter_input), "%S")
         self.view.experimenter_entry.config(validatecommand=validate_initials)
 
-    def bind_sheet(self, on_sheet_modified):
+    def bind_sheet(self, on_sheet_modified) -> None:
         self.view.sheet.bind("<<SheetModified>>", on_sheet_modified)
+
+    def bind_close_window_button(self, on_close_window_button) -> None:
+        self.view.master.protocol("WM_DELETE_WINDOW", on_close_window_button)
 
     def get_user_inputs(self) -> tuple[str, str, str]:
         if is_empty(self.view.scan_value.get()):
@@ -84,7 +88,7 @@ class ViewFacade:
             self.view.sheet.span("A1"),
             readonly=True,
         )
-        self.view.update_sheet(data)
+        self.view.set_sheet(data)
 
     def get_last_measure(self) -> list[object]:
         last_row_index = self.view.sheet.get_total_rows() - 1

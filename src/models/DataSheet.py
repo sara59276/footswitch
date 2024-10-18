@@ -23,4 +23,6 @@ class DataSheet:
     def reset(self):
         self.__filepath = None
 
+    def set_readonly(self):
+        FileManager.set_readonly(self.__filepath)
 

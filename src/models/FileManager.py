@@ -1,6 +1,8 @@
 import csv
 import os
+import platform
 from datetime import datetime
+from stat import S_IREAD
 
 
 class FileManager:
@@ -51,3 +53,10 @@ class FileManager:
     def clear(filepath) -> None:
         with open(filepath, 'w'):
             pass
+
+    @staticmethod
+    def set_readonly(filepath) -> None:
+        if platform.system() == 'Windows':
+            os.chmod(filepath, S_IREAD)
+        else:  # macOS and Linux
+            os.chmod(filepath, 0o444)

@@ -36,6 +36,9 @@ class Controller:
         self.__view.bind_sheet(
             self.on_sheet_modified,
         )
+        self.__view.bind_close_window_button(
+            self.on_close_window_button,
+        )
 
     def display_footswitch_connection(self) -> None:
         is_detected = DeviceManager.is_footswitch_connected()
@@ -67,7 +70,7 @@ class Controller:
             raise
 
     def reset_measures(self) -> None:
-        # TODO add dialog "sure to reset ?"
+        self.__data_sheet.set_readonly()
         self.__view.reset_view()
         self.__data_sheet.reset()
         self.__view.enable_user_inputs()
@@ -100,7 +103,6 @@ class Controller:
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()
-        print("data:\n")
         self.__data_sheet.update(data)
 
     def load_sheet_content(self) -> None:
@@ -112,3 +114,6 @@ class Controller:
 
     def on_device_disconnect(self, device_id, device_info) -> None:
         self.__view.display_footswitch_disconnected()
+
+    def on_close_window_button(self) -> None:
+        self.__data_sheet.set_readonly()

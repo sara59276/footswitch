@@ -16,7 +16,7 @@ class View(ttk.Frame):
     def start_mainloop(self) -> None:
         self.master.mainloop()
 
-    def update_sheet(self, data) -> None:
+    def set_sheet(self, data) -> None:
         self.sheet.set_sheet_data(data)
         self.append_empty_row()
 
@@ -86,7 +86,6 @@ class View(ttk.Frame):
         self.sheet = tksheet.Sheet(self.sheet_frame)
         self.sheet.enable_bindings("single_select",
                                "row_select",
-                               "column_width_resize",
                                "arrowkeys",
                                "rc_select",
                                "copy",
