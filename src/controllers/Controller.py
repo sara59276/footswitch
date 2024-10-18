@@ -2,7 +2,6 @@ import re
 
 from models.DeviceManager import DeviceManager
 from models.FileManager import FileManager
-from models.FootSwitchListener import FootSwitchListener
 from models.DataSheet import DataSheet
 from views.ViewFacade import ViewFacade
 
@@ -12,8 +11,6 @@ class Controller:
         self.data_sheet = data_sheet
         self.view = view
         self._bind()
-
-        self.listener = FootSwitchListener()
 
     def start(self) -> None:
         self.display_footswitch_connection()
