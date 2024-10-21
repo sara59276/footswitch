@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 
+from constants.footswitch_device import FOOTSWITCH_KEY_SIMULATOR
 from models.DeviceManager import DeviceManager
 from models.FileManager import FileManager
 from models.DataSheet import DataSheet
@@ -34,6 +35,7 @@ class Controller:
             self.validate_experimenter_input,
         )
         self.__view.bind_sheet(
+            self.validate_sheet_input,
             self.on_sheet_modified,
         )
         self.__view.bind_close_window_button(
@@ -80,7 +82,6 @@ class Controller:
         if self.__has_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
             current_time = datetime.now().time().strftime("%H:%M:%S.%f")
-            print(current_time)
             self.__view.add_start_time(current_time)
             print("Footswitch pressed")
 
@@ -100,6 +101,11 @@ class Controller:
     def validate_experimenter_input(self, value) -> bool:
         pattern = r'^[A-Za-z]+$'
         return bool(re.fullmatch(pattern, value))
+
+    def validate_sheet_input(self, event) -> str:
+        print("validating sheet input")
+        if isinstance(event.value, str) and event.value:
+            return event.value.replace(FOOTSWITCH_KEY_SIMULATOR, "")
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()

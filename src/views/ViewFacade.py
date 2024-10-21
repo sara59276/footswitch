@@ -29,7 +29,8 @@ class ViewFacade:
         validate_initials = (self.view.register(validate_experimenter_input), "%S")
         self.view.experimenter_entry.config(validatecommand=validate_initials)
 
-    def bind_sheet(self, on_sheet_modified) -> None:
+    def bind_sheet(self, validate_sheet_input, on_sheet_modified, ) -> None:
+        self.view.sheet.edit_validation(validate_sheet_input)
         self.view.sheet.bind("<<SheetModified>>", on_sheet_modified)
 
     def bind_close_window_button(self, on_close_window_button) -> None:
@@ -69,7 +70,6 @@ class ViewFacade:
         start_time_col = "B"
         last_row_index = self.view.sheet.get_total_rows()
         start_time_cell = f"{start_time_col}{last_row_index}"
-        print(start_time_cell)
         self.view.sheet.span(start_time_cell).data = [start_time]
 
     def add_end_time(self, end_time):
