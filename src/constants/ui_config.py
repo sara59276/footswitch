@@ -1,4 +1,4 @@
-APP_TITLE = "Foot Switch GUI"
+APP_TITLE = "FootSwitch App"
 
 WINDOW_START_WIDTH = 850
 WINDOW_MIN_WIDTH = 400

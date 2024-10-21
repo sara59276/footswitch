@@ -15,3 +15,9 @@ class ImageManager:
         icon = Image.open(icon_path)
         resized_icon = icon.resize((width, height))
         return ImageTk.PhotoImage(resized_icon)
+
+    @staticmethod
+    def get_app_icon():
+        base_dir = Path(__file__).resolve().parent
+        src_dir = base_dir.parent
+        return src_dir / 'resources' / 'images' / 'app_icon.ico'
