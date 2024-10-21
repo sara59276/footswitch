@@ -3,15 +3,14 @@ from models.FileManager import FileManager
 
 class DataSheet:
 
-    HEADER = ["event", "start_time", "end_time"]
+    HEADER = ['event', 'start_time', 'end_time']
 
     def __init__(self):
         self.__filepath= None
 
     def initialize(self, filepath: str) -> None:
         self.__filepath = filepath
-        FileManager.create_new_empty_file(filepath)
-        FileManager.append(filepath, DataSheet.HEADER)
+        FileManager.create_new_file(filepath, DataSheet.HEADER)
 
     def get_data_from_file(self):
         return FileManager.get_content(self.__filepath)

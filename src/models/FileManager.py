@@ -2,30 +2,36 @@ import csv
 import os
 import platform
 from datetime import datetime
+from os.path import normpath
 from stat import S_IREAD
 
 
 class FileManager:
 
     @staticmethod
-    def create_new_empty_file(filepath: str) -> None:
+    def create_new_file(filepath: str, header) -> None:
         directory = os.path.dirname(filepath)
         if not os.path.exists(directory):
             os.makedirs(directory)
             print(f"Directory {directory} created")
 
         if not os.path.exists(filepath):
-            with open(filepath, 'w') as file:
-                file.write('')
+            with open(filepath, mode="w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(header)
             print(f"Created new file : {filepath}")
         else:
             raise FileExistsError(f"The file already exists: {filepath}")
 
     @staticmethod
     def append(filepath: str, content) -> None:
-        with open(filepath, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(content)
+        with open(normpath(filepath), "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(
+                file,
+                dialect=csv.excel if filepath.lower().endswith(".csv") else csv.excel_tab,
+                lineterminator="\n",
+            )
+            writer.writerows(content)
 
     @staticmethod
     def get_content(filepath) ->  list[list[str]]:
@@ -43,7 +49,7 @@ class FileManager:
     @staticmethod
     def get_destination_folder() -> str:
         root_directory = os.path.abspath(os.sep)
-        app_data_directory = os.path.join(root_directory, 'footswitch', 'data')
+        app_data_directory = os.path.join(root_directory, 'Footswitch', 'data')
         current_year = str(datetime.now().year)
         current_month = str(datetime.now().month).zfill(2)
         current_day = str(datetime.now().day).zfill(2)

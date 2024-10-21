@@ -57,9 +57,9 @@ class Controller:
             )
             self.__data_sheet.initialize(filepath)
             if filepath:
-                self.__view.display_success(f"File created : {filepath}")
+                self.__view.display_success(f"File created: {filepath}")
             else:
-                self.__view.display_error(f"File not created.")
+                self.__view.display_error(f"Error: File not created")
 
             self.__view.disable_user_inputs()
             self.load_sheet_content()

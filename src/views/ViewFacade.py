@@ -127,7 +127,7 @@ class ViewFacade:
         self.view.msg_value.set("")
 
     def get_sheet_content(self) -> object:
-        return self.view.sheet.get_data()
+        return self.view.sheet.data
 
     def get_root(self):
         return self.view.get_root()
