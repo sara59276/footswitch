@@ -79,22 +79,24 @@ class Controller:
 
     def footswitch_pressed(self, event) -> None:
         self.__view.set_focus_out_of_sheet()
+        self.__view.display_footswitch_pressed_icon()
+        print("Footswitch pressed")
+
         if self.__has_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
             current_time = datetime.now().time().strftime("%H:%M:%S.%f")
             self.__view.add_start_time(current_time)
-            self.__view.display_footswitch_pressed_icon()
-            print("Footswitch pressed")
 
     def footswitch_released(self, event) -> None:
+        self.__view.display_footswitch_released_icon()
+        print("Footswitch released")
+
         if self.__has_started:
             self.__is_footswitch_pressed = False
             current_time = datetime.now().time().strftime("%H:%M:%S.%f")
             self.__view.add_end_time(current_time)
             updated_data_sheet = self.__view.get_sheet_content()
             self.__data_sheet.update(updated_data_sheet)
-            self.__view.display_footswitch_released_icon()
-            print("Footswitch released")
 
     def validate_scan_and_animal_inputs(self, value) -> bool:
         pattern = r'^[\w]+$'
