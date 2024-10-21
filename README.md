@@ -41,5 +41,5 @@ pip freeze > requirements.txt
 ## How to generate the executable
 ```
 pip install pyinstaller
-pyinstaller.exe --noconsole --onefile --name FootSwitch_App --icon=img/app_icon.png .\src\main.py
+pyinstaller.exe --noconsole --onefile --name FootSwitch_App --icon=img/app_icon.ico .\src\main.py
 ```
