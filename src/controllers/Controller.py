@@ -1,10 +1,9 @@
 import re
 from datetime import datetime
 
-from constants.footswitch_device import FOOTSWITCH_KEY_SIMULATOR
+from models.DataSheet import DataSheet
 from models.DeviceManager import DeviceManager
 from models.FileManager import FileManager
-from models.DataSheet import DataSheet
 from views.ViewFacade import ViewFacade
 
 
@@ -18,6 +17,7 @@ class Controller:
 
     def start(self) -> None:
         self.display_footswitch_connection()
+        self.__view.display_footswitch_released_icon()
         DeviceManager.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.__view.start_mainloop()
 
@@ -35,7 +35,6 @@ class Controller:
             self.validate_experimenter_input,
         )
         self.__view.bind_sheet(
-            self.validate_sheet_input,
             self.on_sheet_modified,
         )
         self.__view.bind_close_window_button(
@@ -79,10 +78,12 @@ class Controller:
         self.__has_started = False
 
     def footswitch_pressed(self, event) -> None:
+        self.__view.set_focus_out_of_sheet()
         if self.__has_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
             current_time = datetime.now().time().strftime("%H:%M:%S.%f")
             self.__view.add_start_time(current_time)
+            self.__view.display_footswitch_pressed_icon()
             print("Footswitch pressed")
 
     def footswitch_released(self, event) -> None:
@@ -92,6 +93,7 @@ class Controller:
             self.__view.add_end_time(current_time)
             updated_data_sheet = self.__view.get_sheet_content()
             self.__data_sheet.update(updated_data_sheet)
+            self.__view.display_footswitch_released_icon()
             print("Footswitch released")
 
     def validate_scan_and_animal_inputs(self, value) -> bool:
@@ -101,11 +103,6 @@ class Controller:
     def validate_experimenter_input(self, value) -> bool:
         pattern = r'^[A-Za-z]+$'
         return bool(re.fullmatch(pattern, value))
-
-    def validate_sheet_input(self, event) -> str:
-        print("validating sheet input")
-        if isinstance(event.value, str) and event.value:
-            return event.value.replace(FOOTSWITCH_KEY_SIMULATOR, "")
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()

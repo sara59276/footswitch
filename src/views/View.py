@@ -2,6 +2,8 @@ from tkinter import ttk, StringVar, Entry
 
 import tksheet
 
+from models.ImageManager import ImageManager
+
 
 class View(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
@@ -38,7 +40,7 @@ class View(ttk.Frame):
         self.entries_frame = ttk.Frame(self)
         self.sheet_frame = ttk.Frame(self)
         self.control_frame = ttk.Frame(self)
-        self.device_frame = ttk.Frame(self)
+        self.device_connection_label = ttk.Frame(self)
         self.msg_frame = ttk.Frame(self)
 
     def _initialize_widgets(self) -> None:
@@ -47,7 +49,8 @@ class View(ttk.Frame):
         self._initialize_experimenter()
         self._initialize_sheet()
         self._initialize_control_buttons()
-        self._initialize_device_label()
+        self._initialize_footswitch_icon_labels()
+        self._initialize_device_connection_label()
         self._initialize_msg_label()
 
     def _initialize_scan(self) -> None:
@@ -110,9 +113,21 @@ class View(ttk.Frame):
         for button in (self.start_btn, self.reset_btn):
             button.config(width=15, padding=30)
 
-    def _initialize_device_label(self) -> None:
-        self.device_label = ttk.Label(
-            self.device_frame,
+    def _initialize_footswitch_icon_labels(self) -> None:
+        self.fs_released_icon = ImageManager.get_image("footswitch_released")
+        self.fs_released_icon_label = ttk.Label(
+            self.device_connection_label,
+            image=self.fs_released_icon
+        )
+        self.fs_pressed_icon = ImageManager.get_image("footswitch_pressed")
+        self.fs_pressed_icon_label = ttk.Label(
+            self.device_connection_label,
+            image=self.fs_pressed_icon
+        )
+
+    def _initialize_device_connection_label(self) -> None:
+        self.device_connection_label = ttk.Label(
+            self.device_connection_label,
             textvariable=self.device_value,
         )
 
@@ -126,7 +141,7 @@ class View(ttk.Frame):
         self.entries_frame.grid(row=0, column=0)
         self.sheet_frame.grid(row=1, column=0)
         self.control_frame.grid(row=1, column=1)
-        self.device_frame.grid(row=2, column=0)
+        self.device_connection_label.grid(row=2, column=0)
         self.msg_frame.grid(row=3, column=0)
 
         for frame in self.winfo_children():
@@ -142,6 +157,6 @@ class View(ttk.Frame):
         self.sheet.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.start_btn.grid(row=0, column=0, sticky="ew", padx=5)
         self.reset_btn.grid(row=1, column=0, sticky="ew", padx=5)
-        self.device_label.grid(row=0, column=0, sticky="ew", padx=5)
+        self.device_connection_label.grid(row=0, column=1, sticky="ew", padx=5)
         self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
 

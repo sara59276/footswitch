@@ -29,12 +29,11 @@ class ViewFacade:
         validate_initials = (self.view.register(validate_experimenter_input), "%S")
         self.view.experimenter_entry.config(validatecommand=validate_initials)
 
-    def bind_sheet(self, validate_sheet_input, on_sheet_modified, ) -> None:
-        self.view.sheet.edit_validation(validate_sheet_input)
+    def bind_sheet(self, on_sheet_modified) -> None:
         self.view.sheet.bind("<<SheetModified>>", on_sheet_modified)
 
     def bind_close_window_button(self, on_close_window_button) -> None:
-        self.view.master.protocol("WM_DELETE_WINDOW", on_close_window_button)
+        self.view.get_root().protocol("WM_DELETE_WINDOW", on_close_window_button)
 
     def get_user_inputs(self) -> tuple[str, str, str]:
         if is_empty(self.view.scan_value.get()):
@@ -95,13 +94,21 @@ class ViewFacade:
         row_content = self.view.sheet.get_row_data(last_row_index)
         return row_content
 
+    def display_footswitch_released_icon(self) -> None:
+        self.view.fs_pressed_icon_label.grid_forget()
+        self.view.fs_released_icon_label.grid(row=0, column=0, sticky="ew", padx=5)
+
+    def display_footswitch_pressed_icon(self) -> None:
+        self.view.fs_released_icon_label.grid_forget()
+        self.view.fs_pressed_icon_label.grid(row=0, column=0, sticky="ew", padx=5)
+
     def display_footswitch_disconnected(self) -> None:
         self.view.device_value.set("FootSwitch FS22 is disconnected")
-        self.view.device_label.config(style="Red.TLabel")
+        self.view.device_connection_label.config(style="Red.TLabel")
 
     def display_footswitch_connected(self) -> None:
         self.view.device_value.set("FootSwitch FS22 is connected")
-        self.view.device_label.config(style="Green.TLabel")
+        self.view.device_connection_label.config(style="Green.TLabel")
 
     def display_error(self, content: str) -> None:
         self.view.msg_value.set(content)
@@ -124,6 +131,9 @@ class ViewFacade:
 
     def get_root(self):
         return self.view.get_root()
+
+    def set_focus_out_of_sheet(self) -> None:
+        self.get_root().focus_set()
 
     def _initialize_styles(self) -> None:
         style = ttk.Style()
