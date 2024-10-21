@@ -96,6 +96,7 @@ class Controller:
             updated_data_sheet = self.__view.get_sheet_content()
             self.__data_sheet.update(updated_data_sheet)
             self.__view.append_empty_row()
+            self.__view.sheet_scroll_down()
 
             print("Footswitch released")
 

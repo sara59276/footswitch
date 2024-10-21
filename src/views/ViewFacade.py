@@ -91,6 +91,9 @@ class ViewFacade:
     def append_empty_row(self) -> None:
         self.view.append_empty_row()
 
+    def sheet_scroll_down(self) -> None:
+        self.view.sheet_scroll_down()
+
     def display_footswitch_released_icon(self) -> None:
         self.view.fs_pressed_icon_label.grid_forget()
         self.view.fs_released_icon_label.grid(row=0, column=0, sticky="ew", padx=5)

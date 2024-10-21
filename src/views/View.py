@@ -29,6 +29,10 @@ class View(ttk.Frame):
     def append_empty_row(self) -> None:
         self.sheet.insert_row()
 
+    def sheet_scroll_down(self) -> None:
+        last_row_index = self.sheet.get_total_rows() - 1
+        self.sheet.see(last_row_index)
+
     def _initialize_value_vars(self) -> None:
         self.scan_value = StringVar()
         self.animal_value = StringVar()
