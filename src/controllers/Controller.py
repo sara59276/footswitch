@@ -15,14 +15,14 @@ class Controller:
         self.__has_started = False
         self._bind()
 
-    def start(self) -> None:
+    def start_app(self) -> None:
         self.display_footswitch_connection()
         self.__view.display_footswitch_released_icon()
         DeviceManager.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.__view.start_mainloop()
 
     def _bind(self) -> None:
-        self.__view.bind_widgets(
+        self.__view.bind_buttons(
             self.start_measures,
             self.reset_measures,
         )
@@ -40,10 +40,6 @@ class Controller:
         self.__view.bind_close_window_button(
             self.on_close_window_button,
         )
-
-    def display_footswitch_connection(self) -> None:
-        is_detected = DeviceManager.is_footswitch_connected()
-        self.__view.display_footswitch_connected() if is_detected else self.__view.display_footswitch_disconnected()
 
     def start_measures(self) -> None:
         try:
@@ -77,6 +73,10 @@ class Controller:
         self.__view.enable_user_inputs()
         self.__has_started = False
 
+    def display_footswitch_connection(self) -> None:
+        is_detected = DeviceManager.is_footswitch_connected()
+        self.__view.display_footswitch_connected() if is_detected else self.__view.display_footswitch_disconnected()
+
     def footswitch_pressed(self, event) -> None:
         self.__view.display_footswitch_pressed_icon()
 
@@ -95,6 +95,8 @@ class Controller:
             self.__view.add_end_time(current_time)
             updated_data_sheet = self.__view.get_sheet_content()
             self.__data_sheet.update(updated_data_sheet)
+            self.__view.append_empty_row()
+
             print("Footswitch released")
 
     def validate_scan_and_animal_inputs(self, value) -> bool:

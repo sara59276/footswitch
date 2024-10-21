@@ -13,7 +13,7 @@ class ViewFacade:
     def start_mainloop(self) -> None:
         self.view.start_mainloop()
 
-    def bind_widgets(self, start_command, reset_command) -> None:
+    def bind_buttons(self, start_command, reset_command) -> None:
         self.view.start_btn.config(command=start_command)
         self.view.reset_btn.config(command=reset_command)
 
@@ -76,7 +76,6 @@ class ViewFacade:
         last_row_index = self.view.sheet.get_total_rows()
         start_time_cell = f"{end_time_col}{last_row_index}"
         self.view.sheet.span(start_time_cell).data = [end_time]
-        self.view.append_empty_row()
 
     def set_sheet(self, data) -> None:
         self.view.sheet.readonly(
@@ -89,10 +88,8 @@ class ViewFacade:
         )
         self.view.set_sheet(data)
 
-    def get_last_measure(self) -> list[object]:
-        last_row_index = self.view.sheet.get_total_rows() - 1
-        row_content = self.view.sheet.get_row_data(last_row_index)
-        return row_content
+    def append_empty_row(self) -> None:
+        self.view.append_empty_row()
 
     def display_footswitch_released_icon(self) -> None:
         self.view.fs_pressed_icon_label.grid_forget()

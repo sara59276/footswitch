@@ -18,7 +18,11 @@ class DataSheet:
     def update(self, data) -> None:
         if self.__filepath is not None:
             FileManager.clear(self.__filepath)
-            FileManager.append(self.__filepath, data)
+
+            # last row is always empty, let's remove it
+            cleaned_data = [row for row in data if any(cell.strip() for cell in row)]
+
+            FileManager.append(self.__filepath, cleaned_data)
 
     def reset(self):
         self.__filepath = None

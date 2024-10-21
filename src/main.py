@@ -11,7 +11,7 @@ def main():
     view = View(root)
     viewFacade = ViewFacade(view)
     controller = Controller(viewFacade, sheet)
-    controller.start()
+    controller.start_app()
 
 if __name__ == "__main__":
     main()
