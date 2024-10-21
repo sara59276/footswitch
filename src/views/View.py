@@ -92,7 +92,7 @@ class View(ttk.Frame):
     def _initialize_sheet(self) -> None:
         self.sheet = tksheet.Sheet(
             self.sheet_frame,
-            width=450,
+            width=550,
             height=450,
         )
         self.sheet.enable_bindings("single_select",
@@ -142,14 +142,11 @@ class View(ttk.Frame):
         )
 
     def _display_frames(self) -> None:
-        self.entries_frame.grid(row=0, column=0)
-        self.device_connection_frame.grid(row=1, column=0)
-        self.sheet_frame.grid(row=2, column=0)
-        self.control_frame.grid(row=2, column=1)
-        self.msg_frame.grid(row=3, column=0)
-
-        for frame in self.winfo_children():
-            frame.grid(sticky="nsew", padx=20, pady=20)
+        self.entries_frame.grid(row=0, column=0, padx=20, pady=20)
+        self.device_connection_frame.grid(row=0, column=1, padx=20, pady=20)
+        self.msg_frame.grid(row=1, column=0, sticky="nsew", padx=20)
+        self.sheet_frame.grid(row=2, column=0, padx=20, pady=20)
+        self.control_frame.grid(row=2, column=1, padx=20, pady=20)
 
     def _display_widgets(self) -> None:
         self.scan_label.grid(row=0, column=0, sticky="e", padx=5)
@@ -159,7 +156,7 @@ class View(ttk.Frame):
         self.experimenter_label.grid(row=0, column=4, sticky="e", padx=5)
         self.experimenter_entry.grid(row=0, column=5, sticky="w", padx=5)
         self.sheet.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-        self.start_btn.grid(row=0, column=0, sticky="ew", padx=5)
+        self.start_btn.grid(row=0, column=0, sticky="ew", padx=5, pady=40)
         self.reset_btn.grid(row=1, column=0, sticky="ew", padx=5)
         self.device_connection_label.grid(row=0, column=1, sticky="ew", padx=5)
         self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
