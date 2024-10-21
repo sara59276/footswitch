@@ -111,11 +111,11 @@ class View(ttk.Frame):
             self.control_frame,
             text="START",
         )
-        self.reset_btn = ttk.Button(
+        self.end_btn = ttk.Button(
             self.control_frame,
-            text="RESET",
+            text="END",
         )
-        for button in (self.start_btn, self.reset_btn):
+        for button in (self.start_btn, self.end_btn):
             button.config(width=15, padding=30)
 
     def _initialize_footswitch_icon_labels(self) -> None:
@@ -158,7 +158,7 @@ class View(ttk.Frame):
         self.experimenter_entry.grid(row=0, column=5, sticky="w", padx=5)
         self.sheet.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.start_btn.grid(row=0, column=0, sticky="ew", padx=5, pady=10)
-        self.reset_btn.grid(row=1, column=0, sticky="ew", padx=5)
+        self.end_btn.grid(row=1, column=0, sticky="ew", padx=5)
         self.device_connection_label.grid(row=0, column=1, sticky="ew", padx=5)
         self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
 

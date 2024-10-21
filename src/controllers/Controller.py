@@ -24,7 +24,7 @@ class Controller:
     def _bind(self) -> None:
         self.__view.bind_buttons(
             self.start_measures,
-            self.reset_measures,
+            self.end_measures,
         )
         self.__view.bind_footswitch(
             self.footswitch_pressed,
@@ -66,7 +66,7 @@ class Controller:
             self.__view.display_error(str(e))
             raise
 
-    def reset_measures(self) -> None:
+    def end_measures(self) -> None:
         self.__data_sheet.set_readonly()
         self.__view.reset_view()
         self.__data_sheet.reset()

@@ -15,7 +15,7 @@ class ViewFacade:
 
     def bind_buttons(self, start_command, reset_command) -> None:
         self.view.start_btn.config(command=start_command)
-        self.view.reset_btn.config(command=reset_command)
+        self.view.end_btn.config(command=reset_command)
 
     def bind_footswitch(self, footswitch_pressed, footswitch_released) -> None:
         self.view.master.bind(f"<{FOOTSWITCH_KEY_SIMULATOR}>", footswitch_pressed)
