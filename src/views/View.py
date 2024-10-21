@@ -40,7 +40,7 @@ class View(ttk.Frame):
         self.entries_frame = ttk.Frame(self)
         self.sheet_frame = ttk.Frame(self)
         self.control_frame = ttk.Frame(self)
-        self.device_connection_label = ttk.Frame(self)
+        self.device_connection_frame = ttk.Frame(self)
         self.msg_frame = ttk.Frame(self)
 
     def _initialize_widgets(self) -> None:
@@ -90,7 +90,11 @@ class View(ttk.Frame):
         )
 
     def _initialize_sheet(self) -> None:
-        self.sheet = tksheet.Sheet(self.sheet_frame)
+        self.sheet = tksheet.Sheet(
+            self.sheet_frame,
+            width=450,
+            height=450,
+        )
         self.sheet.enable_bindings("single_select",
                                "row_select",
                                "arrowkeys",
@@ -116,18 +120,18 @@ class View(ttk.Frame):
     def _initialize_footswitch_icon_labels(self) -> None:
         self.fs_released_icon = ImageManager.get_image("footswitch_released")
         self.fs_released_icon_label = ttk.Label(
-            self.device_connection_label,
+            self.device_connection_frame,
             image=self.fs_released_icon
         )
         self.fs_pressed_icon = ImageManager.get_image("footswitch_pressed")
         self.fs_pressed_icon_label = ttk.Label(
-            self.device_connection_label,
+            self.device_connection_frame,
             image=self.fs_pressed_icon
         )
 
     def _initialize_device_connection_label(self) -> None:
         self.device_connection_label = ttk.Label(
-            self.device_connection_label,
+            self.device_connection_frame,
             textvariable=self.device_value,
         )
 
@@ -139,9 +143,9 @@ class View(ttk.Frame):
 
     def _display_frames(self) -> None:
         self.entries_frame.grid(row=0, column=0)
-        self.sheet_frame.grid(row=1, column=0)
-        self.control_frame.grid(row=1, column=1)
-        self.device_connection_label.grid(row=2, column=0)
+        self.device_connection_frame.grid(row=1, column=0)
+        self.sheet_frame.grid(row=2, column=0)
+        self.control_frame.grid(row=2, column=1)
         self.msg_frame.grid(row=3, column=0)
 
         for frame in self.winfo_children():
