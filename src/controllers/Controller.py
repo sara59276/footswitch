@@ -1,14 +1,14 @@
 import re
 from datetime import datetime
 
-from models.DataSheet import DataSheet
+from models.EventLogSheet import EventLogSheet
 from models.DeviceManager import DeviceManager
 from models.FileManager import FileManager
 from views.ViewFacade import ViewFacade
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, data_sheet: DataSheet):
+    def __init__(self, view: ViewFacade, data_sheet: EventLogSheet):
         self.__data_sheet = data_sheet
         self.__view = view
         self.__is_footswitch_pressed = False
@@ -23,9 +23,9 @@ class Controller:
 
     def _bind(self) -> None:
         self.__view.bind_buttons(
-            self.start_measures,
-            self.end_measures,
-            self.clear_measures,
+            self.start_session,
+            self.end_session,
+            self.clear_session,
         )
         self.__view.bind_footswitch(
             self.footswitch_pressed,
@@ -42,7 +42,7 @@ class Controller:
             self.on_close_window_button,
         )
 
-    def start_measures(self) -> None:
+    def start_session(self) -> None:
         try:
             self.__view.clear_msg()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
@@ -67,10 +67,10 @@ class Controller:
             self.__view.display_error(str(e))
             raise
 
-    def end_measures(self) -> None:
+    def end_session(self) -> None:
         pass
 
-    def clear_measures(self) -> None:
+    def clear_session(self) -> None:
         self.__data_sheet.set_readonly()
         self.__view.reset_view()
         self.__data_sheet.reset()

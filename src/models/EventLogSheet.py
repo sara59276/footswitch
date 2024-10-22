@@ -1,7 +1,7 @@
 from models.FileManager import FileManager
 
 
-class DataSheet:
+class EventLogSheet:
 
     HEADER = ['event', 'start_time', 'end_time']
 
@@ -10,7 +10,7 @@ class DataSheet:
 
     def initialize(self, filepath: str) -> None:
         self.__filepath = filepath
-        FileManager.create_new_file(filepath, DataSheet.HEADER)
+        FileManager.create_new_file(filepath, EventLogSheet.HEADER)
 
     def get_data_from_file(self):
         return FileManager.get_content(self.__filepath)
