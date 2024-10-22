@@ -35,7 +35,7 @@ variable `FOOTSWITCH_KEY_SIMULATOR` in `constants/footswitch_device.py` file are
 
 ## How to update the requirements.txt
 ```
-.\venv\Scripts\activate
+.\.venv\Scripts\activate
 pip freeze > requirements.txt
 ```
 ## How to generate the executable
