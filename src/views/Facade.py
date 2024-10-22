@@ -2,10 +2,11 @@ import tkinter
 from tkinter import ttk
 
 from constants.footswitch_device import FOOTSWITCH_KEY_SIMULATOR
+from views.FacadeInterface import FacadeInterface
 from views.View import View
 
 
-class ViewFacade:
+class Facade(FacadeInterface):
     def __init__(self, view: View):
         self.view = view
         self._initialize_styles()

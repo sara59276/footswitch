@@ -5,12 +5,12 @@ from models.SessionMetadata import SessionMetadata
 from models.static.DeviceManager import DeviceManager
 from models.static.FileManager import FileManager
 from models.static.TimeManager import TimeManager
-from views.ViewFacade import ViewFacade
+from views.FacadeInterface import FacadeInterface
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, sheet: SessionData):
-        self.sheet = sheet
+    def __init__(self, view: FacadeInterface, session_data: SessionData):
+        self.__session_data = session_data
         self.__view = view
 
         self.__session_metadata: SessionMetadata = SessionMetadata()
@@ -49,7 +49,7 @@ class Controller:
                 current_date=current_date,
             )
 
-            self.sheet.initialize(filepath)
+            self.__session_data.initialize(filepath)
             if filepath:
                 self.__view.display_success(f"File created: {filepath}")
             else:
@@ -70,9 +70,9 @@ class Controller:
         # TODO update file
 
     def clear_session(self) -> None:
-        self.sheet.set_readonly()
+        self.__session_data.set_readonly()
         self.__view.reset_view()
-        self.sheet.reset()
+        self.__session_data.reset()
         self.__view.enable_user_inputs()
         self.__has_started = False
 
@@ -97,7 +97,7 @@ class Controller:
             current_time = datetime.now().time().strftime("%H:%M:%S.%f")
             self.__view.add_end_time(current_time)
             updated_data_sheet = self.__view.get_sheet_content()
-            self.sheet.update(updated_data_sheet)
+            self.__session_data.update(updated_data_sheet)
             self.__view.append_empty_row()
             self.__view.sheet_scroll_down()
 
@@ -113,10 +113,10 @@ class Controller:
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()
-        self.sheet.update(data)
+        self.__session_data.update(data)
 
     def load_sheet_content(self) -> None:
-        data = self.sheet.get_data_from_file()
+        data = self.__session_data.get_data_from_file()
         self.__view.set_sheet(data)
 
     def on_device_connect(self, device_id, device_info) -> None:
@@ -126,7 +126,7 @@ class Controller:
         self.__view.display_footswitch_disconnected()
 
     def on_close_window_button(self) -> None:
-        self.sheet.set_readonly()
+        self.__session_data.set_readonly()
         root = self.__view.get_root()
         root.destroy()
 
