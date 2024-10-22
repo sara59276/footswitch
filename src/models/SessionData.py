@@ -22,7 +22,7 @@ class SessionData:
             # last row is always empty, let's remove it
             cleaned_data = [row for row in data if any(cell.strip() for cell in row)]
 
-            FileManager.append(self.__filepath, cleaned_data)
+            FileManager.update_data(self.__filepath, cleaned_data)
 
     def reset(self):
         self.__filepath = None

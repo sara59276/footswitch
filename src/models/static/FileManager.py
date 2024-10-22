@@ -14,6 +14,20 @@ class FileManager:
     EMPTY_LINE = ','.join([''] * COLUMNS_COUNT) + '\n'
 
     @staticmethod
+    def get_destination_folder() -> str:
+        root_directory = os.path.abspath(os.sep)
+        app_data_directory = os.path.join(root_directory, 'Footswitch', 'data')
+        current_year = str(datetime.now().year)
+        current_month = str(datetime.now().month).zfill(2)
+        current_day = str(datetime.now().day).zfill(2)
+        return os.path.join(app_data_directory, current_year, current_month, current_day)
+
+    @staticmethod
+    def create_filepath(destination_folder: str, scan_id: str, animal_id: str, experimenter_initials: str, current_date: str) -> str:
+        file_name = f"{scan_id}_{animal_id}_{experimenter_initials}_{current_date}.csv"
+        return os.path.join(destination_folder, file_name)
+
+    @staticmethod
     def create_new_file(filepath: str, header) -> None:
         directory = os.path.dirname(filepath)
         if not os.path.exists(directory):
@@ -26,17 +40,7 @@ class FileManager:
                 writer.writerow(header)
             print(f"Created new file : {filepath}")
         else:
-            raise FileExistsError(f"The file already exists: {filepath}")
-
-    @staticmethod
-    def append(filepath: str, content) -> None:
-        with open(normpath(filepath), "w", newline="", encoding="utf-8") as file:
-            writer = csv.writer(
-                file,
-                dialect=csv.excel if filepath.lower().endswith(".csv") else csv.excel_tab,
-                lineterminator="\n",
-            )
-            writer.writerows(content)
+            raise FileExistsError(f"This file already exists: {filepath}")
 
     @staticmethod
     def get_content(filepath) ->  list[list[str]]:
@@ -46,22 +50,17 @@ class FileManager:
         return content
 
     @staticmethod
-    def create_filepath(destination_folder: str, scan_id: str, animal_id: str, experimenter_initials: str, current_date: str) -> str:
-        file_name = f"{scan_id}_{animal_id}_{experimenter_initials}_{current_date}.csv"
-        return os.path.join(destination_folder, file_name)
+    def update_metadata(filepath: str, content: list) -> None:
+        FileManager._write_to_csv(filepath, content)
 
     @staticmethod
-    def get_destination_folder() -> str:
-        root_directory = os.path.abspath(os.sep)
-        app_data_directory = os.path.join(root_directory, 'Footswitch', 'data')
-        current_year = str(datetime.now().year)
-        current_month = str(datetime.now().month).zfill(2)
-        current_day = str(datetime.now().day).zfill(2)
-        return os.path.join(app_data_directory, current_year, current_month, current_day)
+    def update_data(filepath: str, content: list) -> None:
+        write_position = SessionMetadata.TOTAL_FIELDS + 1
+        FileManager._write_to_csv(filepath, content, write_position)
 
     @staticmethod
     def clear_metadata(filepath) -> None:
-        with open(filepath, 'w') as file:
+        with open(filepath, "w") as file:
             lines = []
             lines.extend([FileManager.EMPTY_LINE] * SessionMetadata.TOTAL_FIELDS)
             file.writelines(lines)
@@ -78,3 +77,14 @@ class FileManager:
             os.chmod(filepath, S_IREAD)
         else:  # macOS and Linux
             os.chmod(filepath, 0o444)
+
+    @staticmethod
+    def _write_to_csv(filepath: str, content: list, write_position: int = 0) -> None:
+        with open(normpath(filepath), mode="w", newline="", encoding="utf-8") as file:
+            file.seek(write_position)
+            writer = csv.writer(
+                file,
+                dialect=csv.excel,
+                lineterminator="\n",
+            )
+            writer.writerows(content)
