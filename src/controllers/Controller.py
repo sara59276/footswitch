@@ -10,11 +10,16 @@ from views.FacadeInterface import FacadeInterface
 
 
 class Controller:
-    def __init__(self, view: FacadeInterface, session_data: SessionData):
+    def __init__(
+            self,
+            view: FacadeInterface,
+            session_metadata: SessionMetadata,
+            session_data: SessionData,
+    ):
+        self.__session_metadata = session_metadata
         self.__session_data = session_data
         self.__view = view
 
-        self.__session_metadata: SessionMetadata = SessionMetadata()
         self.__is_footswitch_pressed = False
         self.__has_started = False
 
@@ -34,7 +39,7 @@ class Controller:
             session_start_time = TimeManager.get_current_time()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
 
-            self.__session_metadata = SessionMetadata(
+            self.__session_metadata.set_start_session_attributes(
                 current_date=current_date,
                 session_start=session_start_time,
                 scan_id=scan_id,
