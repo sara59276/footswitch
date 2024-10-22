@@ -4,7 +4,7 @@ from typing import List
 class SessionData:
     def __init__(
             self,
-            date: str = None,
+            current_date: str = None,
             session_start: str = None,
             session_end: str = None,
             scan_id: str = None,
@@ -12,13 +12,13 @@ class SessionData:
             experimenter_initials: str = None,
 
     ):
-        if (date is not None
+        if (current_date is not None
             and session_start is not None
             and scan_id is not None
             and animal_id is not None
             and experimenter_initials is not None
         ):
-            self.__date = date
+            self.__date = current_date
             self.__session_start = session_start
             self.__session_end = session_end
             self.__scan_id = scan_id

@@ -1,7 +1,7 @@
 from tkinter import *
 
 from constants.ui_config import WINDOW_START_WIDTH, WINDOW_START_HEIGHT, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT, APP_TITLE
-from models.ImageManager import ImageManager
+from models.static.ImageManager import ImageManager
 
 
 class Root(Tk):

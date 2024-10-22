@@ -1,4 +1,4 @@
-from models.FileManager import FileManager
+from models.static.FileManager import FileManager
 
 
 class EventLogSheet:

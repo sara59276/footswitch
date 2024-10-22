@@ -2,17 +2,22 @@ import re
 from datetime import datetime
 
 from models.EventLogSheet import EventLogSheet
-from models.DeviceManager import DeviceManager
-from models.FileManager import FileManager
+from models.SessionData import SessionData
+from models.static.DeviceManager import DeviceManager
+from models.static.FileManager import FileManager
+from models.static.TimeManager import TimeManager
 from views.ViewFacade import ViewFacade
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, data_sheet: EventLogSheet):
-        self.__data_sheet = data_sheet
+    def __init__(self, view: ViewFacade, sheet: EventLogSheet):
+        self.sheet = sheet
         self.__view = view
+
+        self.__session_data: SessionData = SessionData()
         self.__is_footswitch_pressed = False
         self.__has_started = False
+
         self._bind()
 
     def start_app(self) -> None:
@@ -45,14 +50,28 @@ class Controller:
     def start_session(self) -> None:
         try:
             self.__view.clear_msg()
+
+            current_date = TimeManager.get_current_date()
+            session_start_time = TimeManager.get_current_time()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
+
+            self.__session_data = SessionData(
+                current_date=current_date,
+                session_start=session_start_time,
+                scan_id=scan_id,
+                animal_id=animal_id,
+                experimenter_initials=experimenter_initials,
+            )
+
             filepath = FileManager.create_filepath(
                 destination_folder=FileManager.get_destination_folder(),
                 scan_id=scan_id,
                 animal_id=animal_id,
-                experimenter_initials=experimenter_initials.upper()
+                experimenter_initials=experimenter_initials.upper(),
+                current_date=current_date,
             )
-            self.__data_sheet.initialize(filepath)
+
+            self.sheet.initialize(filepath)
             if filepath:
                 self.__view.display_success(f"File created: {filepath}")
             else:
@@ -68,12 +87,14 @@ class Controller:
             raise
 
     def end_session(self) -> None:
-        pass
+        session_end_time = TimeManager.get_current_time()
+        self.__session_data.set_session_end(session_end_time)
+        # TODO update file
 
     def clear_session(self) -> None:
-        self.__data_sheet.set_readonly()
+        self.sheet.set_readonly()
         self.__view.reset_view()
-        self.__data_sheet.reset()
+        self.sheet.reset()
         self.__view.enable_user_inputs()
         self.__has_started = False
 
@@ -86,7 +107,7 @@ class Controller:
 
         if self.__has_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
-            current_time = datetime.now().time().strftime("%H:%M:%S.%f")
+            current_time = TimeManager.get_current_time()
             self.__view.add_start_time(current_time)
             print("Footswitch pressed")
 
@@ -98,7 +119,7 @@ class Controller:
             current_time = datetime.now().time().strftime("%H:%M:%S.%f")
             self.__view.add_end_time(current_time)
             updated_data_sheet = self.__view.get_sheet_content()
-            self.__data_sheet.update(updated_data_sheet)
+            self.sheet.update(updated_data_sheet)
             self.__view.append_empty_row()
             self.__view.sheet_scroll_down()
 
@@ -114,10 +135,10 @@ class Controller:
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()
-        self.__data_sheet.update(data)
+        self.sheet.update(data)
 
     def load_sheet_content(self) -> None:
-        data = self.__data_sheet.get_data_from_file()
+        data = self.sheet.get_data_from_file()
         self.__view.set_sheet(data)
 
     def on_device_connect(self, device_id, device_info) -> None:
@@ -127,6 +148,6 @@ class Controller:
         self.__view.display_footswitch_disconnected()
 
     def on_close_window_button(self) -> None:
-        self.__data_sheet.set_readonly()
+        self.sheet.set_readonly()
         root = self.__view.get_root()
         root.destroy()
