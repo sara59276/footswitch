@@ -16,7 +16,7 @@ git clone https://github.com/sara59276/FootSwitch.git
 cd FootSwitch
 pip install virtualenv
 virtualenv .venv
-.\venv\Scripts\activate
+.\.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 Lastly, mark the `src` directory as sources root.
@@ -41,5 +41,5 @@ pip freeze > requirements.txt
 ## How to generate the executable
 ```
 pip install pyinstaller
-pyinstaller.exe --noconsole --onefile --name FootSwitch_App --icon=img/app_icon.ico --add-data "src/resources/images;resources/images" .\src\main.py
+pyinstaller.exe --noconsole --onefile --name FootSwitch_App --icon=src/resources/images/app_icon.png --add-data "src/resources/images;resources/images" .\src\main.py
 ```
