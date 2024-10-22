@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 from tkinter import Tk
 from typing import Callable, Tuple
 
-from views import View
-
 
 class FacadeInterface(ABC):
 
