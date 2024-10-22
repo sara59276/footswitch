@@ -1,5 +1,4 @@
 import re
-from datetime import datetime
 
 from models.SessionData import SessionData
 from models.SessionMetadata import SessionMetadata
@@ -33,8 +32,6 @@ class Controller:
 
     def start_session(self) -> None:
         try:
-            self.__view.clear_msg()
-
             current_date = TimeManager.get_current_date()
             session_start_time = TimeManager.get_current_time()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
@@ -55,14 +52,15 @@ class Controller:
                 current_date=current_date,
             )
 
-            self.__session_data.initialize(filepath)
             if filepath:
+                self.__session_data.initialize(filepath)
                 self.__view.display_success(f"File created: {filepath}")
             else:
                 self.__view.display_error(f"Error: File not created")
 
+            self.__view.clear_msg()
             self.__view.disable_user_inputs()
-            self.load_sheet_content()
+            self._load_sheet_content()
             self.__has_started = True
         except (FileExistsError, ValueError) as e:
             self.__view.display_error(str(e))
@@ -100,7 +98,7 @@ class Controller:
 
         if self.__has_started:
             self.__is_footswitch_pressed = False
-            current_time = datetime.now().time().strftime("%H:%M:%S.%f")
+            current_time = TimeManager.get_current_time()
             self.__view.add_end_time(current_time)
             updated_data_sheet = self.__view.get_sheet_content()
             self.__session_data.update(updated_data_sheet)
@@ -120,10 +118,6 @@ class Controller:
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()
         self.__session_data.update(data)
-
-    def load_sheet_content(self) -> None:
-        data = self.__session_data.get_data_from_file()
-        self.__view.set_sheet(data)
 
     def on_device_connect(self, device_id, device_info) -> None:
         self.__view.display_footswitch_connected()
@@ -156,3 +150,7 @@ class Controller:
         self.__view.bind_close_window_button(
             self.on_close_window_button,
         )
+
+    def _load_sheet_content(self) -> None:
+        data = self.__session_data.get_data_from_file()
+        self.__view.set_sheet(data)
