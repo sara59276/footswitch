@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-
 from models.SessionData import SessionData
 from models.SessionMetadata import SessionMetadata
 from models.static.DeviceManager import DeviceManager
@@ -10,11 +9,11 @@ from views.ViewFacade import ViewFacade
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, sheet: SessionMetadata):
+    def __init__(self, view: ViewFacade, sheet: SessionData):
         self.sheet = sheet
         self.__view = view
 
-        self.__session_data: SessionMetadata = SessionMetadata()
+        self.__session_metadata: SessionMetadata = SessionMetadata()
         self.__is_footswitch_pressed = False
         self.__has_started = False
 
@@ -26,27 +25,6 @@ class Controller:
         DeviceManager.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.__view.start_mainloop()
 
-    def _bind(self) -> None:
-        self.__view.bind_buttons(
-            self.start_session,
-            self.end_session,
-            self.clear_session,
-        )
-        self.__view.bind_footswitch(
-            self.footswitch_pressed,
-            self.footswitch_released,
-        )
-        self.__view.bind_entry_constraints(
-            self.validate_scan_and_animal_inputs,
-            self.validate_experimenter_input,
-        )
-        self.__view.bind_sheet(
-            self.on_sheet_modified,
-        )
-        self.__view.bind_close_window_button(
-            self.on_close_window_button,
-        )
-
     def start_session(self) -> None:
         try:
             self.__view.clear_msg()
@@ -55,7 +33,7 @@ class Controller:
             session_start_time = TimeManager.get_current_time()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
 
-            self.__session_data = SessionMetadata(
+            self.__session_metadata = SessionMetadata(
                 current_date=current_date,
                 session_start=session_start_time,
                 scan_id=scan_id,
@@ -88,7 +66,7 @@ class Controller:
 
     def end_session(self) -> None:
         session_end_time = TimeManager.get_current_time()
-        self.__session_data.set_session_end(session_end_time)
+        self.__session_metadata.set_session_end(session_end_time)
         # TODO update file
 
     def clear_session(self) -> None:
@@ -151,3 +129,24 @@ class Controller:
         self.sheet.set_readonly()
         root = self.__view.get_root()
         root.destroy()
+
+    def _bind(self) -> None:
+        self.__view.bind_buttons(
+            self.start_session,
+            self.end_session,
+            self.clear_session,
+        )
+        self.__view.bind_footswitch(
+            self.footswitch_pressed,
+            self.footswitch_released,
+        )
+        self.__view.bind_entry_constraints(
+            self.validate_scan_and_animal_inputs,
+            self.validate_experimenter_input,
+        )
+        self.__view.bind_sheet(
+            self.on_sheet_modified,
+        )
+        self.__view.bind_close_window_button(
+            self.on_close_window_button,
+        )

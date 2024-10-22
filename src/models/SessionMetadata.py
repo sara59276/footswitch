@@ -29,4 +29,5 @@ class SessionMetadata:
             ['scan_id', self.__scan_id, ''],
             ['animal_id', self.__animal_id, ''],
             ['experimenter_initials', self.__experimenter_initials, ''],
+            ['','',''],
         ]
