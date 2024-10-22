@@ -1,8 +1,8 @@
 import re
 from datetime import datetime
 
-from models.EventLogSheet import EventLogSheet
 from models.SessionData import SessionData
+from models.SessionMetadata import SessionMetadata
 from models.static.DeviceManager import DeviceManager
 from models.static.FileManager import FileManager
 from models.static.TimeManager import TimeManager
@@ -10,11 +10,11 @@ from views.ViewFacade import ViewFacade
 
 
 class Controller:
-    def __init__(self, view: ViewFacade, sheet: EventLogSheet):
+    def __init__(self, view: ViewFacade, sheet: SessionMetadata):
         self.sheet = sheet
         self.__view = view
 
-        self.__session_data: SessionData = SessionData()
+        self.__session_data: SessionMetadata = SessionMetadata()
         self.__is_footswitch_pressed = False
         self.__has_started = False
 
@@ -55,7 +55,7 @@ class Controller:
             session_start_time = TimeManager.get_current_time()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
 
-            self.__session_data = SessionData(
+            self.__session_data = SessionMetadata(
                 current_date=current_date,
                 session_start=session_start_time,
                 scan_id=scan_id,

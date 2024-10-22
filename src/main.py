@@ -1,12 +1,12 @@
 from controllers.Controller import Controller
-from models.EventLogSheet import EventLogSheet
+from models.SessionData import SessionData
 from views.Root import Root
 from views.View import View
 from views.ViewFacade import ViewFacade
 
 
 def main():
-    sheet = EventLogSheet()
+    sheet = SessionData()
     root = Root()
     view = View(root)
     viewFacade = ViewFacade(view)
