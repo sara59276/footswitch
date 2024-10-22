@@ -2,6 +2,9 @@ from typing import List
 
 
 class SessionMetadata:
+
+    TOTAL_FIELDS = 6
+
     def __init__(
             self,
             current_date: str = None,

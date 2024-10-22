@@ -5,8 +5,13 @@ from datetime import datetime
 from os.path import normpath
 from stat import S_IREAD
 
+from models.SessionMetadata import SessionMetadata
+
 
 class FileManager:
+
+    COLUMNS_COUNT = 3
+    EMPTY_LINE = ','.join([''] * COLUMNS_COUNT) + '\n'
 
     @staticmethod
     def create_new_file(filepath: str, header) -> None:
@@ -55,9 +60,17 @@ class FileManager:
         return os.path.join(app_data_directory, current_year, current_month, current_day)
 
     @staticmethod
-    def clear(filepath) -> None:
-        with open(filepath, 'w'):
-            pass
+    def clear_metadata(filepath) -> None:
+        with open(filepath, 'w') as file:
+            lines = []
+            lines.extend([FileManager.EMPTY_LINE] * SessionMetadata.TOTAL_FIELDS)
+            file.writelines(lines)
+
+    @staticmethod
+    def clear_data(filepath) -> None:
+        with open(filepath, 'r+') as file:
+            file.seek(SessionMetadata.TOTAL_FIELDS + 1)
+            file.truncate()
 
     @staticmethod
     def set_readonly(filepath) -> None:

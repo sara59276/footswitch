@@ -17,7 +17,7 @@ class SessionData:
 
     def update(self, data) -> None:
         if self.__filepath is not None:
-            FileManager.clear(self.__filepath)
+            FileManager.clear_data(self.__filepath)
 
             # last row is always empty, let's remove it
             cleaned_data = [row for row in data if any(cell.strip() for cell in row)]
