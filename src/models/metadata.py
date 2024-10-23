@@ -5,7 +5,7 @@ from utils.time_util import TimeUtil
 
 class Metadata:
 
-    TOTAL_FIELDS = 6
+    TOTAL_FIELDS = 0
 
     def __init__(
             self,
@@ -22,6 +22,8 @@ class Metadata:
         self.__scan_id = scan_id
         self.__animal_id = animal_id
         self.__experimenter_initials = experimenter_initials
+
+        self.__class__.TOTAL_FIELDS = len(vars(self))
 
     def set_start_session_attributes(
             self,
