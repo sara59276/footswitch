@@ -1,7 +1,7 @@
 from typing import List
 
 
-class SessionMetadata:
+class Metadata:
 
     TOTAL_FIELDS = 6
 

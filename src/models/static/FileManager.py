@@ -5,7 +5,7 @@ from datetime import datetime
 from os.path import normpath
 from stat import S_IREAD
 
-from models.SessionMetadata import SessionMetadata
+from models.Metadata import Metadata
 
 
 class FileManager:
@@ -55,20 +55,20 @@ class FileManager:
 
     @staticmethod
     def update_data(filepath: str, content: list) -> None:
-        write_position = SessionMetadata.TOTAL_FIELDS + 1
+        write_position = Metadata.TOTAL_FIELDS + 1
         FileManager._write_to_csv(filepath, content, write_position)
 
     @staticmethod
     def clear_metadata(filepath) -> None:
         with open(filepath, "w") as file:
             lines = []
-            lines.extend([FileManager.EMPTY_LINE] * SessionMetadata.TOTAL_FIELDS)
+            lines.extend([FileManager.EMPTY_LINE] * Metadata.TOTAL_FIELDS)
             file.writelines(lines)
 
     @staticmethod
     def clear_data(filepath) -> None:
         with open(filepath, 'r+') as file:
-            file.seek(SessionMetadata.TOTAL_FIELDS + 1)
+            file.seek(Metadata.TOTAL_FIELDS + 1)
             file.truncate()
 
     @staticmethod

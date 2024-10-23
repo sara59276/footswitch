@@ -1,7 +1,7 @@
 from models.static.FileManager import FileManager
 
 
-class SessionData:
+class Data:
 
     HEADER = ['event', 'start_time', 'end_time']
 
@@ -10,7 +10,7 @@ class SessionData:
 
     def initialize(self, filepath: str) -> None:
         self.__filepath = filepath
-        FileManager.create_new_file(filepath, SessionData.HEADER)
+        FileManager.create_new_file(filepath, Data.HEADER)
 
     def get_data_from_file(self):
         return FileManager.get_content(self.__filepath)
