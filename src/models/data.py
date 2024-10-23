@@ -1,4 +1,4 @@
-from repo.repository import FileRepository
+from repositories.repository import FileRepository
 
 
 class Data:

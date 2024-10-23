@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from repo.dao import FileDao
-from repo.exception import RepositoryException
+from repositories.dao import FileDao
+from repositories.exception import RepositoryException
 
 
 class Repository(ABC):

@@ -4,7 +4,7 @@ from models.data import Data
 from models.metadata import Metadata
 from config.config_manager import ConfigManager
 from utils.file_utils import FileUtil
-from utils.footswitch_monitor import FootSwitchMonitor
+from utils.footswitch_monitor import FootswitchMonitor
 from utils.time_util import TimeUtil
 from views.facade_interface import FacadeInterface
 
@@ -20,6 +20,8 @@ class Controller:
         self.__data = data
         self.__view = view
 
+        self.footswitch_monitor = FootswitchMonitor()
+
         self.__filepath = None
         self.__is_footswitch_pressed = False
         self.__has_started = False
@@ -29,7 +31,7 @@ class Controller:
     def start_app(self) -> None:
         self.display_footswitch_connection()
         self.__view.display_footswitch_released_icon()
-        FootSwitchMonitor.start_monitoring(self.on_device_connect, self.on_device_disconnect)
+        self.footswitch_monitor.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.__view.start_mainloop()
 
     def start_session(self) -> None:
@@ -72,7 +74,7 @@ class Controller:
         self.__view.enable_user_inputs()
 
     def display_footswitch_connection(self) -> None:
-        is_detected = FootSwitchMonitor.is_footswitch_connected()
+        is_detected = self.footswitch_monitor.is_footswitch_connected()
         self.__view.display_footswitch_connected() if is_detected else self.__view.display_footswitch_disconnected()
 
     def footswitch_pressed(self, event) -> None:

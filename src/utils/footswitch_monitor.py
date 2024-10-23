@@ -3,35 +3,26 @@ from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID
 
 from config.config_manager import ConfigManager
 
-# TODO not in utils
-class FootSwitchMonitor:
+class FootswitchMonitor:
 
-    config = ConfigManager()
-    vendor_id = config.get('footswitch_vendor_id')
-    model_id = config.get('footswitch_model_id')
+    def __init__(self):
+        self.config = ConfigManager()
+        self.vendor_id = self.config.get('footswitch_vendor_id')
+        self.model_id = self.config.get('footswitch_model_id')
+        self.monitor = USBMonitor(filter_devices=[{'ID_VENDOR_ID': self.vendor_id, 'ID_MODEL_ID': self.model_id}])
 
-    MONITOR = USBMonitor(filter_devices=[{'ID_VENDOR_ID': vendor_id, 'ID_MODEL_ID': model_id}])
-
-    @staticmethod
-    def start_monitoring(on_connect, on_disconnect) -> None:
-        FootSwitchMonitor.MONITOR.start_monitoring(on_connect=on_connect, on_disconnect=on_disconnect)
+    def start_monitoring(self, on_connect, on_disconnect) -> None:
+        self.monitor.start_monitoring(on_connect=on_connect, on_disconnect=on_disconnect)
 
     def stop_monitoring(self) -> None:
-        FootSwitchMonitor.MONITOR.stop_monitoring()
+        self.monitor.stop_monitoring()
 
-    @staticmethod
-    def is_footswitch_connected() -> bool:
-        devices = FootSwitchMonitor.get_all_current_devices()
+    def is_footswitch_connected(self) -> bool:
+        devices = self.get_all_current_devices()
+        return any(vendor_id == self.vendor_id and model_id == self.model_id
+                   for _, model_id, vendor_id in devices)
 
-        for device_id, model_id, vendor_id in devices:
-            if vendor_id == FootSwitchMonitor.vendor_id and model_id == FootSwitchMonitor.model_id:
-                return True
-
-        return False
-
-    @staticmethod
-    def get_all_current_devices() -> list[tuple[str, str | tuple[str, ...], str | tuple[str, ...]]]:
+    def get_all_current_devices(self) -> list[tuple[str, str | tuple[str, ...], str | tuple[str, ...]]]:
         monitor = USBMonitor()
         devices_dict = monitor.get_available_devices()
-        devices_list = [(key, value[ID_MODEL_ID], value[ID_VENDOR_ID]) for key, value in devices_dict.items()]
-        return devices_list
+        return [(key, value[ID_MODEL_ID], value[ID_VENDOR_ID]) for key, value in devices_dict.items()]

@@ -2,12 +2,10 @@ import configparser
 import os
 from pathlib import Path
 
-from utils.file_utils import FileUtil
-
 
 class ConfigManager:
     """
-    Singleton class
+    Singleton class # TODO keep it so ?
     """
 
     BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +21,6 @@ class ConfigManager:
         return cls._instance
 
     def _load_config(self):
-        print(FileUtil.get_content(self.FILE))
         config = configparser.ConfigParser()
         config.read(self.FILE)
 
