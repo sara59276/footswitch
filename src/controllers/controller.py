@@ -156,7 +156,7 @@ class Controller:
         )
 
     def _load_sheet_content(self) -> None:
-        data = self.__data.get_data_from_file()
+        data = self.__data.get()
         self.__view.set_sheet(data)
 
     def _get_footswitch_key(self) -> str:

@@ -1,6 +1,4 @@
 from repo.repository import FileRepository
-from utils.file_utils import FileUtil
-from utils.time_util import TimeUtil
 
 
 class Data:
@@ -10,33 +8,18 @@ class Data:
     def __init__(self):
         self.__repo = FileRepository()
 
-    def initialize(self, scan_id, animal_id, experimenter_initials) -> str:
-        self.__filepath = FileUtil.create_filepath(
-            destination_folder=FileUtil.get_destination_folder(),
-            scan_id=scan_id,
-            animal_id=animal_id,
-            experimenter_initials=experimenter_initials.upper(),
-            current_date=TimeUtil.get_current_time(),
-        )
-        FileUtil.create_new_file(self.__filepath, Data.HEADER)
-        return self.__filepath
+    def get(self, filepath: str):
+        return self.__repo.get_data(filepath)
 
-    def get_data_from_file(self):
-        return FileUtil.get_content(self.__filepath)
+    def update(self, filepath: str, data = None) -> None:
+        if data is None:
+            self.__repo.set_data(filepath, self.__class__.HEADER)
+        else:
+            cleaned_data = self._pop_empty_last_row(data)
+            self.__repo.clear_data(filepath)
+            self.__repo.set_data(filepath, cleaned_data)
 
-    def update(self, data) -> None:
-        if self.__filepath is not None:
-            FileUtil.clear_data(self.__filepath)
-
-            # last row is always empty, let's remove it
-            cleaned_data = [row for row in data if any(cell.strip() for cell in row)]
-
-            FileUtil.update_data(self.__filepath, cleaned_data)
-
-    def reset(self):
-        self.__filepath = None
-
-    def set_readonly(self):
-        if self.__filepath is not None:
-            FileUtil.set_readonly(self.__filepath)
-
+    def _pop_empty_last_row(self, data):
+        if data and not any(cell.strip() for cell in data[-1]):
+            data.pop()
+        return data
