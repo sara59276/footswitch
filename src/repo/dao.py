@@ -2,8 +2,6 @@ import csv
 from abc import ABC, abstractmethod
 from os.path import normpath
 
-from models.metadata import Metadata
-
 
 class Dao(ABC):
     @abstractmethod
@@ -28,6 +26,7 @@ class Dao(ABC):
 
 class FileDao(Dao):
 
+    METADATA_ROWS_COUNT = 7
     COLUMNS_COUNT = 3
     EMPTY_LINE = ','.join([''] * COLUMNS_COUNT) + '\n'
 
@@ -36,7 +35,7 @@ class FileDao(Dao):
 
     def get_data(self):
         with open(self.__filepath, mode="r", newline="") as file:
-            read_position = Metadata.TOTAL_FIELDS + 1
+            read_position = self.__class__.METADATA_ROWS_COUNT
             file.seek(read_position)
             reader = csv.reader(file)
             content = [row for row in reader]
@@ -46,18 +45,18 @@ class FileDao(Dao):
         self._set(metadata)
 
     def set_data(self, data):
-        write_position = Metadata.TOTAL_FIELDS + 1
+        write_position = self.__class__.METADATA_ROWS_COUNT
         self._set(data, write_position)
 
     def clear_metadata(self):
         with open(self.__filepath, mode="w") as file:
             lines = []
-            lines.extend([self.__class__.EMPTY_LINE] * Metadata.TOTAL_FIELDS)
+            lines.extend([self.__class__.EMPTY_LINE] * self.__class__.METADATA_ROWS_COUNT)
             file.writelines(lines)
 
     def clear_data(self):
         with open(self.__filepath, mode="r+") as file:
-            file.seek(Metadata.TOTAL_FIELDS + 1)
+            file.seek(self.__class__.METADATA_ROWS_COUNT)
             file.truncate()
 
     def _set(self, content, write_position: int = 0):

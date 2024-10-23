@@ -1,11 +1,10 @@
 from typing import List
 
+from repo.repository import FileRepository
 from utils.time_util import TimeUtil
 
 
 class Metadata:
-
-    TOTAL_FIELDS = 0
 
     def __init__(
             self,
@@ -23,7 +22,7 @@ class Metadata:
         self.__animal_id = animal_id
         self.__experimenter_initials = experimenter_initials
 
-        self.__class__.TOTAL_FIELDS = len(vars(self))
+        self.__repo = FileRepository()
 
     def set_start_session_attributes(
             self,

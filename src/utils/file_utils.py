@@ -10,9 +10,6 @@ from models.metadata import Metadata
 
 class FileUtil:
 
-    COLUMNS_COUNT = 3
-    EMPTY_LINE = ','.join([''] * COLUMNS_COUNT) + '\n'
-
     @staticmethod
     def get_destination_folder() -> str:
         root_directory = os.path.abspath(os.sep)
@@ -49,27 +46,6 @@ class FileUtil:
             content = [row for row in reader]
         return content
 
-    @staticmethod
-    def update_metadata(filepath: str, content: list) -> None:
-        FileUtil._write_to_csv(filepath, content)
-
-    @staticmethod
-    def update_data(filepath: str, content: list) -> None:
-        write_position = Metadata.TOTAL_FIELDS + 1
-        FileUtil._write_to_csv(filepath, content, write_position)
-
-    @staticmethod
-    def clear_metadata(filepath) -> None:
-        with open(filepath, "w") as file:
-            lines = []
-            lines.extend([FileUtil.EMPTY_LINE] * Metadata.TOTAL_FIELDS)
-            file.writelines(lines)
-
-    @staticmethod
-    def clear_data(filepath) -> None:
-        with open(filepath, 'r+') as file:
-            file.seek(Metadata.TOTAL_FIELDS + 1)
-            file.truncate()
 
     @staticmethod
     def set_readonly(filepath) -> None:
@@ -77,14 +53,3 @@ class FileUtil:
             os.chmod(filepath, S_IREAD)
         else:  # macOS and Linux
             os.chmod(filepath, 0o444)
-
-    @staticmethod
-    def _write_to_csv(filepath: str, content: list, write_position: int = 0) -> None:
-        with open(normpath(filepath), mode="w", newline="", encoding="utf-8") as file:
-            file.seek(write_position)
-            writer = csv.writer(
-                file,
-                dialect=csv.excel,
-                lineterminator="\n",
-            )
-            writer.writerows(content)

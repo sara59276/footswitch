@@ -1,3 +1,4 @@
+from repo.repository import FileRepository
 from utils.file_utils import FileUtil
 from utils.time_util import TimeUtil
 
@@ -7,11 +8,7 @@ class Data:
     HEADER = ['event', 'start_time', 'end_time']
 
     def __init__(self):
-        self.__filepath= None
-
-        self.__events: list[str] = []
-        self.__start_times: list[str] = []
-        self.__end_times: list[str] = []
+        self.__repo = FileRepository()
 
     def initialize(self, scan_id, animal_id, experimenter_initials) -> str:
         self.__filepath = FileUtil.create_filepath(
