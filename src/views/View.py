@@ -9,7 +9,7 @@ class View(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.__container = container
-        self.grid(sticky="nsew")
+        self.grid()
         self._initialize_value_vars()
         self._initialize_frames()
         self._initialize_widgets()
