@@ -19,6 +19,7 @@ class Controller:
         self.__data = data
         self.__view = view
 
+        self.__filepath = None
         self.__is_footswitch_pressed = False
         self.__has_started = False
 
