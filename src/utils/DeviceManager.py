@@ -1,12 +1,16 @@
 from usbmonitor import USBMonitor
 from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID
 
-from constants.footswitch_device import FOOTSWITCH_FS22PM_PRODUCT_ID_STR, FOOTSWITCH_FS22PM_VENDOR_ID_STR
+from config.ConfigManager import ConfigManager
 
 
 class DeviceManager:
 
-    MONITOR = USBMonitor(filter_devices=[{'ID_VENDOR_ID': FOOTSWITCH_FS22PM_VENDOR_ID_STR, 'ID_MODEL_ID': FOOTSWITCH_FS22PM_PRODUCT_ID_STR}])
+    config = ConfigManager()
+    vendor_id = config.get('footswitch_vendor_id')
+    model_id = config.get('footswitch_model_id')
+
+    MONITOR = USBMonitor(filter_devices=[{'ID_VENDOR_ID': vendor_id, 'ID_MODEL_ID': model_id}])
 
     @staticmethod
     def start_monitoring(on_connect, on_disconnect) -> None:
@@ -20,7 +24,7 @@ class DeviceManager:
         devices = DeviceManager.get_all_current_devices()
 
         for device_id, model_id, vendor_id in devices:
-            if model_id == FOOTSWITCH_FS22PM_PRODUCT_ID_STR and vendor_id == FOOTSWITCH_FS22PM_VENDOR_ID_STR:
+            if vendor_id == vendor_id and model_id == model_id:
                 return True
 
         return False

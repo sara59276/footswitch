@@ -8,7 +8,7 @@ class ImageManager:
 
     @staticmethod
     def get_filepath(filename: str) -> Path:
-        base_dir = Path(__file__).resolve().parent.parent
+        base_dir = Path(__file__).resolve().parent
         src_dir = base_dir.parent
         return src_dir / 'resources' / 'images' / filename
 
