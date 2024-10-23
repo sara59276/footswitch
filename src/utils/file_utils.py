@@ -5,7 +5,7 @@ from datetime import datetime
 from os.path import normpath
 from stat import S_IREAD
 
-from models.Metadata import Metadata
+from models.metadata import Metadata
 
 
 class FileUtil:

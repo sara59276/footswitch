@@ -1,6 +1,6 @@
 from typing import List
 
-from utils.TimeUtil import TimeUtil
+from utils.time_util import TimeUtil
 
 
 class Metadata:

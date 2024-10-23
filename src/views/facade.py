@@ -1,8 +1,8 @@
 import tkinter
 from tkinter import ttk
 
-from views.FacadeInterface import FacadeInterface
-from views.View import View
+from views.facade_interface import FacadeInterface
+from views.view import View
 
 
 class Facade(FacadeInterface):

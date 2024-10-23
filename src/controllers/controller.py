@@ -1,11 +1,11 @@
 import re
 
-from models.Data import Data
-from models.Metadata import Metadata
-from config.ConfigManager import ConfigManager
-from utils.FootSwitchMonitor import FootSwitchMonitor
-from utils.TimeUtil import TimeUtil
-from views.FacadeInterface import FacadeInterface
+from models.data import Data
+from models.metadata import Metadata
+from config.config_manager import ConfigManager
+from utils.footswitch_monitor import FootSwitchMonitor
+from utils.time_util import TimeUtil
+from views.facade_interface import FacadeInterface
 
 
 class Controller:

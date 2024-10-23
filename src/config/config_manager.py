@@ -2,7 +2,7 @@ import configparser
 import os
 from pathlib import Path
 
-from utils.FileUtil import FileUtil
+from utils.file_utils import FileUtil
 
 
 class ConfigManager:

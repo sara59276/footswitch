@@ -1,9 +1,9 @@
-from controllers.Controller import Controller
-from models.Data import Data
-from models.Metadata import Metadata
-from views.Facade import Facade
-from views.Root import Root
-from views.View import View
+from controllers.controller import Controller
+from models.data import Data
+from models.metadata import Metadata
+from views.facade import Facade
+from views.root import Root
+from views.view import View
 
 
 def main():

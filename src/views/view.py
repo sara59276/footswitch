@@ -2,7 +2,7 @@ from tkinter import ttk, StringVar, Entry
 
 import tksheet
 
-from utils.ImageUtil import ImageUtil
+from utils.image_utils import ImageUtil
 
 
 class View(ttk.Frame):

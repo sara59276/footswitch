@@ -1,5 +1,5 @@
-from utils.FileUtil import FileUtil
-from utils.TimeUtil import TimeUtil
+from utils.file_utils import FileUtil
+from utils.time_util import TimeUtil
 
 
 class Data:
