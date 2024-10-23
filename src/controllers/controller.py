@@ -45,6 +45,9 @@ class Controller:
                 animal_id=animal_id,
                 experimenter_initials=experimenter_initials,
             )
+            self.__data.update(
+                self.__filepath,
+            )
 
             if self.__filepath:
                 self.__view.display_success(f"File created: {self.__filepath}")
@@ -67,7 +70,6 @@ class Controller:
 
     def clear_session(self) -> None:
         FileUtil.set_readonly(self.__filepath)
-        self.__filepath = None
         self.__has_started = False
 
         self.__view.reset_view()
