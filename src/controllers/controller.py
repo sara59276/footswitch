@@ -61,15 +61,15 @@ class Controller:
 
     def end_session(self) -> None:
         self.__metadata.set_session_end(self.__filepath)
-        self.__data.set_readonly()
-        # TODO update file
+        FileUtil.set_readonly(self.__filepath)
 
     def clear_session(self) -> None:
-        self.__data.set_readonly()
-        self.__view.reset_view()
-        self.__data.reset()
-        self.__view.enable_user_inputs()
+        FileUtil.set_readonly(self.__filepath)
+        self.__filepath = None
         self.__has_started = False
+
+        self.__view.reset_view()
+        self.__view.enable_user_inputs()
 
     def display_footswitch_connection(self) -> None:
         is_detected = FootSwitchMonitor.is_footswitch_connected()
@@ -82,21 +82,21 @@ class Controller:
             self.__is_footswitch_pressed = True
             current_time = TimeUtil.get_current_time()
             self.__view.add_start_time(current_time)
-            print("Footswitch pressed")
 
     def footswitch_released(self, event) -> None:
         self.__view.display_footswitch_released_icon()
 
         if self.__has_started:
             self.__is_footswitch_pressed = False
+
             current_time = TimeUtil.get_current_time()
             self.__view.add_end_time(current_time)
-            updated_data_sheet = self.__view.get_sheet_content()
-            self.__data.update(updated_data_sheet)
+
+            updated_data = self.__view.get_sheet_content()
+            self.__data.update(self.__filepath, updated_data)
+
             self.__view.append_empty_row()
             self.__view.sheet_scroll_down()
-
-            print("Footswitch released")
 
     def validate_scan_and_animal_inputs(self, value) -> bool:
         pattern = r'^[\w]+$'
@@ -108,7 +108,7 @@ class Controller:
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()
-        self.__data.update(data)
+        self.__data.update(self.__filepath, data)
 
     def on_device_connect(self, device_id, device_info) -> None:
         self.__view.display_footswitch_connected()
@@ -117,7 +117,7 @@ class Controller:
         self.__view.display_footswitch_disconnected()
 
     def on_close_window_button(self) -> None:
-        self.__data.set_readonly()
+        FileUtil.set_readonly(self.__filepath)
         root = self.__view.get_root()
         root.destroy()
 
@@ -156,7 +156,7 @@ class Controller:
         )
 
     def _load_sheet_content(self) -> None:
-        data = self.__data.get()
+        data = self.__data.get(self.__filepath)
         self.__view.set_sheet(data)
 
     def _get_footswitch_key(self) -> str:
