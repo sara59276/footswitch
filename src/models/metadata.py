@@ -6,43 +6,50 @@ from utils.time_util import TimeUtil
 
 class Metadata:
 
-    def __init__(
-            self,
-            current_date: str = "",
-            session_start: str = "",
-            session_end: str = "",
-            scan_id: str = "",
-            animal_id: str = "",
-            experimenter_initials: str = "",
-    ):
-        self.__date = current_date
-        self.__session_start = session_start
-        self.__session_end = session_end
-        self.__scan_id = scan_id
-        self.__animal_id = animal_id
-        self.__experimenter_initials = experimenter_initials
+    def __init__(self):
+        self.__date = None
+        self.__session_start = None
+        self.__session_end = None
+        self.__scan_id = None
+        self.__animal_id = None
+        self.__experimenter_initials = None
 
         self.__repo = FileRepository()
 
-    def set_start_session_attributes(
+    def set_starting_metadata(
             self,
-            current_date: str,
-            session_start: str,
+            filepath: str,
             scan_id: str,
             animal_id: str,
             experimenter_initials: str,
     ) -> None:
-        self.__date = current_date
-        self.__session_start = session_start
+        self.__date = TimeUtil.get_current_date()
+        self.__session_start = TimeUtil.get_current_time()
+        self.__session_end = ""
         self.__scan_id = scan_id
         self.__animal_id = animal_id
         self.__experimenter_initials = experimenter_initials
 
-    def set_session_end(self) -> None:
-        self.__session_end = TimeUtil.get_current_time()
-        # TODO màj du fichier quand on set end session
+        self._update_repository(filepath)
 
-    def convert_to_csv(self) -> List[List[str]]:
+    def set_session_end(self, filepath) -> None:
+        if not (self.__date
+                or self.__session_start
+                or self.__session_end
+                or self.__scan_id
+                or self.__animal_id
+                or self.__experimenter_initials
+        ):
+            raise ValueError("Date, Session start, Session and, Scan ID, Animal ID and Experimenter initials should be defined")
+
+        self.__session_end = TimeUtil.get_current_time()
+        self._update_repository(filepath)
+
+    def _update_repository(self, filepath):
+        self.__repo.clear_metadata(filepath)
+        self.__repo.set_metadata(filepath, self._convert_to_csv())
+
+    def _convert_to_csv(self) -> List[List[str]]:
         return [
             ['date', self.__date, ''],
             ['session_start', self.__session_start, ''],

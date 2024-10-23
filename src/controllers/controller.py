@@ -3,6 +3,7 @@ import re
 from models.data import Data
 from models.metadata import Metadata
 from config.config_manager import ConfigManager
+from utils.file_utils import FileUtil
 from utils.footswitch_monitor import FootSwitchMonitor
 from utils.time_util import TimeUtil
 from views.facade_interface import FacadeInterface
@@ -33,22 +34,18 @@ class Controller:
 
     def start_session(self) -> None:
         try:
-            current_date = TimeUtil.get_current_date()
-            session_start_time = TimeUtil.get_current_time()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
+            self._initialize_filepath(scan_id, animal_id, experimenter_initials)
 
-            self.__metadata.set_start_session_attributes(
-                current_date=current_date,
-                session_start=session_start_time,
+            self.__metadata.set_starting_metadata(
+                filepath=self.__filepath,
                 scan_id=scan_id,
                 animal_id=animal_id,
                 experimenter_initials=experimenter_initials,
             )
 
-            filepath = self.__data.initialize(scan_id, animal_id, experimenter_initials)
-
-            if filepath is not None:
-                self.__view.display_success(f"File created: {filepath}")
+            if self.__filepath:
+                self.__view.display_success(f"File created: {self.__filepath}")
             else:
                 self.__view.display_error(f"Error: File not created")
 
@@ -63,7 +60,7 @@ class Controller:
             raise
 
     def end_session(self) -> None:
-        self.__metadata.set_session_end()
+        self.__metadata.set_session_end(self.__filepath)
         self.__data.set_readonly()
         # TODO update file
 
@@ -144,6 +141,18 @@ class Controller:
         )
         self.__view.bind_close_window_button(
             self.on_close_window_button,
+        )
+
+    def _initialize_filepath(self, scan_id: str, animal_id: str, experimenter_initials: str):
+        dest_folder = FileUtil.get_destination_folder()
+        current_date = TimeUtil.get_current_date()
+
+        self.__filepath = FileUtil.create_filepath(
+            destination_folder=dest_folder,
+            scan_id=scan_id,
+            animal_id=animal_id,
+            experimenter_initials=experimenter_initials,
+            current_date=current_date,
         )
 
     def _load_sheet_content(self) -> None:
