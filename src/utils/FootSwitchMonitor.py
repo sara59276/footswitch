@@ -3,8 +3,8 @@ from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID
 
 from config.ConfigManager import ConfigManager
 
-
-class DeviceManager:
+# TODO not in utils
+class FootSwitchMonitor:
 
     config = ConfigManager()
     vendor_id = config.get('footswitch_vendor_id')
@@ -14,17 +14,17 @@ class DeviceManager:
 
     @staticmethod
     def start_monitoring(on_connect, on_disconnect) -> None:
-        DeviceManager.MONITOR.start_monitoring(on_connect=on_connect, on_disconnect=on_disconnect)
+        FootSwitchMonitor.MONITOR.start_monitoring(on_connect=on_connect, on_disconnect=on_disconnect)
 
     def stop_monitoring(self) -> None:
-        DeviceManager.MONITOR.stop_monitoring()
+        FootSwitchMonitor.MONITOR.stop_monitoring()
 
     @staticmethod
     def is_footswitch_connected() -> bool:
-        devices = DeviceManager.get_all_current_devices()
+        devices = FootSwitchMonitor.get_all_current_devices()
 
         for device_id, model_id, vendor_id in devices:
-            if vendor_id == DeviceManager.vendor_id and model_id == DeviceManager.model_id:
+            if vendor_id == FootSwitchMonitor.vendor_id and model_id == FootSwitchMonitor.model_id:
                 return True
 
         return False

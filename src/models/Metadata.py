@@ -1,5 +1,7 @@
 from typing import List
 
+from utils.TimeUtil import TimeUtil
+
 
 class Metadata:
 
@@ -35,8 +37,9 @@ class Metadata:
         self.__animal_id = animal_id
         self.__experimenter_initials = experimenter_initials
 
-    def set_session_end(self, session_end: str) -> None:
-        self.__session_end = session_end
+    def set_session_end(self) -> None:
+        self.__session_end = TimeUtil.get_current_time()
+        # TODO màj du fichier quand on set end session
 
     def convert_to_csv(self) -> List[List[str]]:
         return [

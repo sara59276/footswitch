@@ -3,9 +3,8 @@ import re
 from models.Data import Data
 from models.Metadata import Metadata
 from config.ConfigManager import ConfigManager
-from utils.DeviceManager import DeviceManager
-from utils.FileManager import FileManager
-from utils.TimeManager import TimeManager
+from utils.FootSwitchMonitor import FootSwitchMonitor
+from utils.TimeUtil import TimeUtil
 from views.FacadeInterface import FacadeInterface
 
 
@@ -28,13 +27,13 @@ class Controller:
     def start_app(self) -> None:
         self.display_footswitch_connection()
         self.__view.display_footswitch_released_icon()
-        DeviceManager.start_monitoring(self.on_device_connect, self.on_device_disconnect)
+        FootSwitchMonitor.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.__view.start_mainloop()
 
     def start_session(self) -> None:
         try:
-            current_date = TimeManager.get_current_date()
-            session_start_time = TimeManager.get_current_time()
+            current_date = TimeUtil.get_current_date()
+            session_start_time = TimeUtil.get_current_time()
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
 
             self.__metadata.set_start_session_attributes(
@@ -45,16 +44,9 @@ class Controller:
                 experimenter_initials=experimenter_initials,
             )
 
-            filepath = FileManager.create_filepath(
-                destination_folder=FileManager.get_destination_folder(),
-                scan_id=scan_id,
-                animal_id=animal_id,
-                experimenter_initials=experimenter_initials.upper(),
-                current_date=current_date,
-            )
+            filepath = self.__data.initialize(scan_id, animal_id, experimenter_initials)
 
-            if filepath:
-                self.__data.initialize(filepath)
+            if filepath is not None:
                 self.__view.display_success(f"File created: {filepath}")
             else:
                 self.__view.display_error(f"Error: File not created")
@@ -70,8 +62,8 @@ class Controller:
             raise
 
     def end_session(self) -> None:
-        session_end_time = TimeManager.get_current_time()
-        self.__metadata.set_session_end(session_end_time)
+        self.__metadata.set_session_end()
+        self.__data.set_readonly()
         # TODO update file
 
     def clear_session(self) -> None:
@@ -82,7 +74,7 @@ class Controller:
         self.__has_started = False
 
     def display_footswitch_connection(self) -> None:
-        is_detected = DeviceManager.is_footswitch_connected()
+        is_detected = FootSwitchMonitor.is_footswitch_connected()
         self.__view.display_footswitch_connected() if is_detected else self.__view.display_footswitch_disconnected()
 
     def footswitch_pressed(self, event) -> None:
@@ -90,7 +82,7 @@ class Controller:
 
         if self.__has_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
-            current_time = TimeManager.get_current_time()
+            current_time = TimeUtil.get_current_time()
             self.__view.add_start_time(current_time)
             print("Footswitch pressed")
 
@@ -99,7 +91,7 @@ class Controller:
 
         if self.__has_started:
             self.__is_footswitch_pressed = False
-            current_time = TimeManager.get_current_time()
+            current_time = TimeUtil.get_current_time()
             self.__view.add_end_time(current_time)
             updated_data_sheet = self.__view.get_sheet_content()
             self.__data.update(updated_data_sheet)

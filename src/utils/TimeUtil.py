@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-class TimeManager:
+class TimeUtil:
 
     @staticmethod
     def get_current_date():

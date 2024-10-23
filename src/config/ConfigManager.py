@@ -2,7 +2,7 @@ import configparser
 import os
 from pathlib import Path
 
-from utils.FileManager import FileManager
+from utils.FileUtil import FileUtil
 
 
 class ConfigManager:
@@ -23,7 +23,7 @@ class ConfigManager:
         return cls._instance
 
     def _load_config(self):
-        print(FileManager.get_content(self.FILE))
+        print(FileUtil.get_content(self.FILE))
         config = configparser.ConfigParser()
         config.read(self.FILE)
 

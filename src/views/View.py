@@ -2,7 +2,7 @@ from tkinter import ttk, StringVar, Entry
 
 import tksheet
 
-from utils.ImageManager import ImageManager
+from utils.ImageUtil import ImageUtil
 
 
 class View(ttk.Frame):
@@ -127,12 +127,12 @@ class View(ttk.Frame):
             button.config(width=15, padding=30)
 
     def _initialize_footswitch_icon_labels(self) -> None:
-        self.fs_released_icon = ImageManager.get_image("footswitch_released_icon.png")
+        self.fs_released_icon = ImageUtil.get_image("footswitch_released_icon.png")
         self.fs_released_icon_label = ttk.Label(
             self.device_connection_frame,
             image=self.fs_released_icon
         )
-        self.fs_pressed_icon = ImageManager.get_image("footswitch_pressed_icon.png")
+        self.fs_pressed_icon = ImageUtil.get_image("footswitch_pressed_icon.png")
         self.fs_pressed_icon_label = ttk.Label(
             self.device_connection_frame,
             image=self.fs_pressed_icon

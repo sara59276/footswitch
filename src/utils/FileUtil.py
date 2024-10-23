@@ -8,7 +8,7 @@ from stat import S_IREAD
 from models.Metadata import Metadata
 
 
-class FileManager:
+class FileUtil:
 
     COLUMNS_COUNT = 3
     EMPTY_LINE = ','.join([''] * COLUMNS_COUNT) + '\n'
@@ -51,18 +51,18 @@ class FileManager:
 
     @staticmethod
     def update_metadata(filepath: str, content: list) -> None:
-        FileManager._write_to_csv(filepath, content)
+        FileUtil._write_to_csv(filepath, content)
 
     @staticmethod
     def update_data(filepath: str, content: list) -> None:
         write_position = Metadata.TOTAL_FIELDS + 1
-        FileManager._write_to_csv(filepath, content, write_position)
+        FileUtil._write_to_csv(filepath, content, write_position)
 
     @staticmethod
     def clear_metadata(filepath) -> None:
         with open(filepath, "w") as file:
             lines = []
-            lines.extend([FileManager.EMPTY_LINE] * Metadata.TOTAL_FIELDS)
+            lines.extend([FileUtil.EMPTY_LINE] * Metadata.TOTAL_FIELDS)
             file.writelines(lines)
 
     @staticmethod
