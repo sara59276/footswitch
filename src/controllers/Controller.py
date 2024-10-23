@@ -2,9 +2,10 @@ import re
 
 from models.Data import Data
 from models.Metadata import Metadata
-from models.static.DeviceManager import DeviceManager
-from models.static.FileManager import FileManager
-from models.static.TimeManager import TimeManager
+from config.ConfigManager import ConfigManager
+from utils.DeviceManager import DeviceManager
+from utils.FileManager import FileManager
+from utils.TimeManager import TimeManager
 from views.FacadeInterface import FacadeInterface
 
 
@@ -137,6 +138,7 @@ class Controller:
             self.clear_session,
         )
         self.__view.bind_footswitch(
+            self._get_footswitch_key(),
             self.footswitch_pressed,
             self.footswitch_released,
         )
@@ -154,3 +156,7 @@ class Controller:
     def _load_sheet_content(self) -> None:
         data = self.__data.get_data_from_file()
         self.__view.set_sheet(data)
+
+    def _get_footswitch_key(self) -> str:
+        config = ConfigManager()
+        return config.get("footswitch_key")

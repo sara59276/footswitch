@@ -1,7 +1,6 @@
 import tkinter
 from tkinter import ttk
 
-from constants.footswitch_device import FOOTSWITCH_KEY_SIMULATOR
 from views.FacadeInterface import FacadeInterface
 from views.View import View
 
@@ -19,9 +18,9 @@ class Facade(FacadeInterface):
         self.view.end_btn.config(command=end_command)
         self.view.clear_btn.config(command=clear_command)
 
-    def bind_footswitch(self, footswitch_pressed, footswitch_released) -> None:
-        self.view.master.bind(f"<{FOOTSWITCH_KEY_SIMULATOR}>", footswitch_pressed)
-        self.view.master.bind(f"<KeyRelease-{FOOTSWITCH_KEY_SIMULATOR}>", footswitch_released)
+    def bind_footswitch(self, footswitch_key, footswitch_pressed, footswitch_released) -> None:
+        self.view.master.bind(f"<{footswitch_key}>", footswitch_pressed)
+        self.view.master.bind(f"<KeyRelease-{footswitch_key}>", footswitch_released)
 
     def bind_entry_constraints(self, validate_scan_and_animal_inputs, validate_experimenter_input) -> None:
         validate_file_compatible = (self.view.register(validate_scan_and_animal_inputs), "%S")

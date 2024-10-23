@@ -1,4 +1,4 @@
-from models.static.FileManager import FileManager
+from utils.FileManager import FileManager
 
 
 class Data:
@@ -7,6 +7,10 @@ class Data:
 
     def __init__(self):
         self.__filepath= None
+
+        self.__events: list[str] = []
+        self.__start_times: list[str] = []
+        self.__end_times: list[str] = []
 
     def initialize(self, filepath: str) -> None:
         self.__filepath = filepath

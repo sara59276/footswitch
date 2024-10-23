@@ -10,15 +10,29 @@ class FacadeInterface(ABC):
         pass
 
     @abstractmethod
-    def bind_buttons(self, start_command: Callable, end_command: Callable, clear_command: Callable) -> None:
+    def bind_buttons(
+            self,
+            start_command: Callable,
+            end_command: Callable,
+            clear_command: Callable,
+    ) -> None:
         pass
 
     @abstractmethod
-    def bind_footswitch(self, footswitch_pressed: Callable, footswitch_released: Callable) -> None:
+    def bind_footswitch(
+            self,
+            footswitch_key: str,
+            footswitch_pressed: Callable,
+            footswitch_released: Callable,
+    ) -> None:
         pass
 
     @abstractmethod
-    def bind_entry_constraints(self, validate_scan_and_animal_inputs: Callable, validate_experimenter_input: Callable) -> None:
+    def bind_entry_constraints(
+            self,
+            validate_scan_and_animal_inputs: Callable,
+            validate_experimenter_input: Callable,
+    ) -> None:
         pass
 
     @abstractmethod
