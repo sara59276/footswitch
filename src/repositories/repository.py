@@ -31,6 +31,7 @@ class FileRepository(Repository):
 
     def get_data(self, filepath):
         self.__dao.get_data(filepath)
+        print("repo class, file content:\n", self.__dao.get_data(filepath))
 
     def set_metadata(self, filepath, metadata):
         if metadata is None or len(metadata) == 0:
@@ -44,7 +45,11 @@ class FileRepository(Repository):
         self.__dao.clear_data(filepath)
 
     def set_data(self, filepath, data):
+        print("in repo, data :\n", data)
         if data is None or len(data) == 0:
             raise RepositoryException("Data can't be empty")
+
+        print("before setting")
         self.__dao.set_data(filepath, data)
+        print("after setting")
 

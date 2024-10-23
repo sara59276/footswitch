@@ -43,6 +43,7 @@ class FileDao(Dao):
 
     def set_data(self, filepath, data):
         write_position = self.__class__.METADATA_ROWS_COUNT
+        print("write position:", write_position)
         self._set(filepath, data, write_position)
 
     def clear_metadata(self, filepath):
@@ -56,12 +57,19 @@ class FileDao(Dao):
             file.seek(self.__class__.METADATA_ROWS_COUNT)
             file.truncate()
 
-    def _set(self, filepath, content, write_position: int = 0):
+    def _set(self, filepath, content, write_row: int = 0):
+        print("in dao set, content :\n", content)
+        print("in dao set, write row:", write_row)
+
         with open(normpath(filepath), mode="w", newline="", encoding="utf-8") as file:
-            file.seek(write_position)
+            for _ in range(self.METADATA_ROWS_COUNT):
+                next(file)
+
             writer = csv.writer(
                 file,
                 dialect=csv.excel,
                 lineterminator="\n",
             )
             writer.writerows(content)
+
+        print("in dao, file content:\n", self.get_data(filepath))

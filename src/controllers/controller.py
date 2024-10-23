@@ -20,7 +20,7 @@ class Controller:
         self.__data = data
         self.__view = view
 
-        self.footswitch_monitor = FootswitchMonitor()
+        self.__footswitch_monitor = FootswitchMonitor()
 
         self.__filepath = None
         self.__is_footswitch_pressed = False
@@ -31,13 +31,20 @@ class Controller:
     def start_app(self) -> None:
         self.display_footswitch_connection()
         self.__view.display_footswitch_released_icon()
-        self.footswitch_monitor.start_monitoring(self.on_device_connect, self.on_device_disconnect)
+        self.__footswitch_monitor.start_monitoring(self.on_device_connect, self.on_device_disconnect)
         self.__view.start_mainloop()
 
     def start_session(self) -> None:
         try:
             scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
             self._initialize_filepath(scan_id, animal_id, experimenter_initials)
+
+            if self.__filepath:
+                print("before. filepath = ", self.__filepath)
+                self.__view.display_success(f"File created: {self.__filepath}")
+                print("after. filepath = ", self.__filepath)
+            else:
+                raise FileNotFoundError(f"Error: File not created")
 
             self.__metadata.set_starting_metadata(
                 filepath=self.__filepath,
@@ -49,16 +56,12 @@ class Controller:
                 self.__filepath,
             )
 
-            if self.__filepath:
-                self.__view.display_success(f"File created: {self.__filepath}")
-            else:
-                self.__view.display_error(f"Error: File not created")
-
             self.__view.clear_msg()
             self.__view.disable_user_inputs()
             self._load_sheet_content()
             self.__has_started = True
-        except (FileExistsError, ValueError) as e:
+
+        except (FileExistsError, FileNotFoundError, ValueError) as e:
             self.__view.display_error(str(e))
         except Exception as e:
             self.__view.display_error(str(e))
@@ -76,7 +79,7 @@ class Controller:
         self.__view.enable_user_inputs()
 
     def display_footswitch_connection(self) -> None:
-        is_detected = self.footswitch_monitor.is_footswitch_connected()
+        is_detected = self.__footswitch_monitor.is_footswitch_connected()
         self.__view.display_footswitch_connected() if is_detected else self.__view.display_footswitch_disconnected()
 
     def footswitch_pressed(self, event) -> None:
