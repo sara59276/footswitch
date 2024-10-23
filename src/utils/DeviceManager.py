@@ -24,7 +24,7 @@ class DeviceManager:
         devices = DeviceManager.get_all_current_devices()
 
         for device_id, model_id, vendor_id in devices:
-            if vendor_id == vendor_id and model_id == model_id:
+            if vendor_id == DeviceManager.vendor_id and model_id == DeviceManager.model_id:
                 return True
 
         return False
