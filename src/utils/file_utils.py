@@ -20,9 +20,12 @@ class FileUtil:
         return os.path.join(app_data_directory, current_year, current_month, current_day)
 
     @staticmethod
-    def create_filepath(destination_folder: str, scan_id: str, animal_id: str, experimenter_initials: str, current_date: str) -> str:
-        file_name = f"{scan_id}_{animal_id}_{experimenter_initials}_{current_date}.csv"
-        return os.path.join(destination_folder, file_name)
+    def create_file(destination_folder: str, scan_id: str, animal_id: str, experimenter_initials: str, current_date: str) -> str:
+        filename = f"{scan_id}_{animal_id}_{experimenter_initials}_{current_date}.csv"
+        filepath = os.path.join(destination_folder, filename)
+        with open(filepath, mode='w', newline='', encoding='utf-8') as file:
+            pass
+        return filepath
 
     @staticmethod
     def create_new_file(filepath: str, header) -> None:

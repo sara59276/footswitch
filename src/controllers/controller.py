@@ -40,9 +40,7 @@ class Controller:
             self._initialize_filepath(scan_id, animal_id, experimenter_initials)
 
             if self.__filepath:
-                print("before. filepath = ", self.__filepath)
-                self.__view.display_success(f"File created: {self.__filepath}")
-                print("after. filepath = ", self.__filepath)
+                self.__view.display_success(f"File created: {self.__filepath}") # TODO bug never displayed
             else:
                 raise FileNotFoundError(f"Error: File not created")
 
@@ -125,7 +123,8 @@ class Controller:
         self.__view.display_footswitch_disconnected()
 
     def on_close_window_button(self) -> None:
-        FileUtil.set_readonly(self.__filepath)
+        if self.__filepath:
+            FileUtil.set_readonly(self.__filepath)
         root = self.__view.get_root()
         root.destroy()
 
@@ -152,13 +151,15 @@ class Controller:
         )
 
     def _initialize_filepath(self, scan_id: str, animal_id: str, experimenter_initials: str):
-        self.__filepath = FileUtil.create_filepath(
+        print("creating file")
+        self.__filepath = FileUtil.create_file(
             destination_folder=FileUtil.get_destination_folder(),
             scan_id=scan_id,
             animal_id=animal_id,
             experimenter_initials=experimenter_initials,
             current_date=TimeUtil.get_formatted_current_date("%Y%m%d"),
         )
+        print("created file : ", self.__filepath)
 
     def _load_sheet_content(self) -> None:
         data = self.__data.get(self.__filepath)

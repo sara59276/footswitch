@@ -24,7 +24,7 @@ class Metadata:
             experimenter_initials: str,
     ) -> None:
         self.__date = TimeUtil.get_formatted_current_date()
-        self.__session_start = TimeUtil.get_formatted_current_time()
+        self.__session_start = TimeUtil.get_formatted_current_time(msec_digits=0)
         self.__session_end = ""
         self.__scan_id = scan_id
         self.__animal_id = animal_id
@@ -42,18 +42,17 @@ class Metadata:
         ):
             raise ValueError("Date, Session start, Session and, Scan ID, Animal ID and Experimenter initials should be defined")
 
-        self.__session_end = TimeUtil.get_formatted_current_time()
+        self.__session_end = TimeUtil.get_formatted_current_time(msec_digits=0)
         self._update_repository(filepath)
 
     def _update_repository(self, filepath):
-        self.__repo.clear_metadata(filepath)
-        self.__repo.set_metadata(filepath, self._convert_to_csv())
+        self.__repo.overwrite_metadata(filepath, self._convert_to_csv())
 
     def _convert_to_csv(self) -> List[List[str]]:
         return [
             ['date<Y-m-d>', self.__date, ''],
-            ['session_start<h:m:s.ms>', self.__session_start, ''],
-            ['session_end<h:m:s.ms>', self.__session_end, ''],
+            ['session_start<H:M:S>', self.__session_start, ''],
+            ['session_end<H:M:S>', self.__session_end, ''],
             ['scan_id', self.__scan_id, ''],
             ['animal_id', self.__animal_id, ''],
             ['experimenter_initials', self.__experimenter_initials, ''],

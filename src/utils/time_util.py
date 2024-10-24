@@ -20,4 +20,10 @@ class TimeUtil:
         if not 0 <= msec_digits <= 6:
             raise ValueError("msec_digits must be between 0 and 6")
 
-        return TimeUtil.get_current_time().strftime(time_format)[:-(6-msec_digits)]
+        current_time = TimeUtil.get_current_time()
+        formatted_time = current_time.strftime(time_format)
+
+        if msec_digits == 0:
+            return formatted_time[:8]
+        else:
+            return formatted_time[:-(6 - msec_digits)]

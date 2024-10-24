@@ -8,16 +8,13 @@ class Data:
     def __init__(self):
         self.__repo = FileRepository()
 
-    def get(self, filepath: str):
+    def get(self, filepath: str) -> list[list[str]]:
         return self.__repo.get_data(filepath)
 
     def update(self, filepath: str, data = None) -> None:
         if data is None:
-            print("Data class, enter if data is None")
             self.__repo.set_data(filepath, self.__class__.HEADER)
-            print("Data class, file content:\n", self.__repo.get_data(filepath))
         else:
-            print("Data class, enter else")
             cleaned_data = self._pop_empty_last_row(data)
             self.__repo.clear_data(filepath)
             self.__repo.set_data(filepath, cleaned_data)

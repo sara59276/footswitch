@@ -5,19 +5,15 @@ from os.path import normpath
 
 class Dao(ABC):
     @abstractmethod
+    def overwrite_metadata(self, filepath, metadata):
+        pass
+
+    @abstractmethod
     def get_data(self, filepath):
         pass
 
     @abstractmethod
-    def set_metadata(self, filepath, metadata):
-        pass
-
-    @abstractmethod
     def set_data(self, filepath, data):
-        pass
-
-    @abstractmethod
-    def clear_metadata(self, filepath):
         pass
 
     @abstractmethod
@@ -26,50 +22,40 @@ class Dao(ABC):
 
 class FileDao(Dao):
 
-    METADATA_ROWS_COUNT = 7
-    COLUMNS_COUNT = 3
-    EMPTY_LINE = ','.join([''] * COLUMNS_COUNT) + '\n'
+    METADATA_ROWS_COUNT = 7 # TODO - magic number
 
-    def get_data(self, filepath):
-        with open(filepath, mode="r", newline="") as file:
-            read_position = self.__class__.METADATA_ROWS_COUNT
-            file.seek(read_position)
+    def overwrite_metadata(self, filepath, content):
+        self._write(filepath, content)
+
+    def get_data(self, filepath) -> list[list[str]]:
+        return self._read(filepath, skip_rows=self.__class__.METADATA_ROWS_COUNT)
+
+    def set_data(self, filepath, content):
+        self._write(filepath, content, skip_rows=self.__class__.METADATA_ROWS_COUNT)
+
+    def clear_data(self, filepath):
+        skip_rows = self.__class__.METADATA_ROWS_COUNT
+        with open(filepath, mode="r+") as file:
+            for _ in range(skip_rows):
+                file.readline()
+            file.seek(file.tell())
+            file.truncate()
+
+    def _read(self, filepath, skip_rows = 0) -> list[list[str]]:
+        with open(normpath(filepath), mode="r", newline="") as file:
+            for _ in range(skip_rows):
+                next(file, None)
             reader = csv.reader(file)
             content = [row for row in reader]
         return content
 
-    def set_metadata(self, filepath, metadata):
-        self._set(filepath, metadata)
-
-    def set_data(self, filepath, data):
-        write_position = self.__class__.METADATA_ROWS_COUNT
-        print("write position:", write_position)
-        self._set(filepath, data, write_position)
-
-    def clear_metadata(self, filepath):
-        with open(filepath, mode="w") as file:
-            lines = []
-            lines.extend([self.__class__.EMPTY_LINE] * self.__class__.METADATA_ROWS_COUNT)
-            file.writelines(lines)
-
-    def clear_data(self, filepath):
-        with open(filepath, mode="r+") as file:
-            file.seek(self.__class__.METADATA_ROWS_COUNT)
-            file.truncate()
-
-    def _set(self, filepath, content, write_row: int = 0):
-        print("in dao set, write row:", write_row)
-        print("in dao set, content :\n", content)
-
-        with open(normpath(filepath), mode="r+", newline="", encoding="utf-8") as file:
-            for _ in range(self.METADATA_ROWS_COUNT):
+    def _write(self, filepath, content, skip_rows = 0) -> None:
+        with open(normpath(filepath), mode="r+") as file:
+            for _ in range(skip_rows):
                 next(file)
-
             writer = csv.writer(
                 file,
                 dialect=csv.excel,
                 lineterminator="\n",
             )
             writer.writerows(content)
-
-        print("in dao, file content:\n", self.get_data(filepath))
