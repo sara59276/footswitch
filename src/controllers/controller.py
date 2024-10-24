@@ -63,6 +63,7 @@ class Controller:
 
         except (FileExistsError, FileNotFoundError, ValueError) as e:
             self.__view.display_error(str(e))
+            raise
         except Exception as e:
             self.__view.display_error(str(e))
             raise
@@ -87,7 +88,7 @@ class Controller:
 
         if self.__has_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
-            current_time = TimeUtil.get_current_time()
+            current_time = TimeUtil.get_formatted_current_time()
             self.__view.add_start_time(current_time)
 
     def footswitch_released(self, event) -> None:
@@ -96,7 +97,7 @@ class Controller:
         if self.__has_started:
             self.__is_footswitch_pressed = False
 
-            current_time = TimeUtil.get_current_time()
+            current_time = TimeUtil.get_formatted_current_time()
             self.__view.add_end_time(current_time)
 
             updated_data = self.__view.get_sheet_content()
@@ -151,15 +152,12 @@ class Controller:
         )
 
     def _initialize_filepath(self, scan_id: str, animal_id: str, experimenter_initials: str):
-        dest_folder = FileUtil.get_destination_folder()
-        current_date = TimeUtil.get_current_date()
-
         self.__filepath = FileUtil.create_filepath(
-            destination_folder=dest_folder,
+            destination_folder=FileUtil.get_destination_folder(),
             scan_id=scan_id,
             animal_id=animal_id,
             experimenter_initials=experimenter_initials,
-            current_date=current_date,
+            current_date=TimeUtil.get_formatted_current_date("%Y%m%d"),
         )
 
     def _load_sheet_content(self) -> None:

@@ -58,10 +58,10 @@ class FileDao(Dao):
             file.truncate()
 
     def _set(self, filepath, content, write_row: int = 0):
-        print("in dao set, content :\n", content)
         print("in dao set, write row:", write_row)
+        print("in dao set, content :\n", content)
 
-        with open(normpath(filepath), mode="w", newline="", encoding="utf-8") as file:
+        with open(normpath(filepath), mode="r+", newline="", encoding="utf-8") as file:
             for _ in range(self.METADATA_ROWS_COUNT):
                 next(file)
 
