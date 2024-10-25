@@ -88,7 +88,11 @@ class FacadeInterface(ABC):
         pass
 
     @abstractmethod
-    def append_empty_row(self) -> None:
+    def append_empty_row_to_sheet(self) -> None:
+        pass
+
+    @abstractmethod
+    def pop_empty_row_in_sheet(self) -> None:
         pass
 
     @abstractmethod

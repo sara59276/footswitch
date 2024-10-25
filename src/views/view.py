@@ -29,6 +29,10 @@ class View(ttk.Frame):
     def append_empty_row(self) -> None:
         self.sheet.insert_row()
 
+    def pop_last_row(self) -> None:
+        last_row_idx = self.sheet.get_total_rows() - 1
+        self.sheet.del_row(idx=last_row_idx)
+
     def sheet_scroll_down(self) -> None:
         last_row_index = self.sheet.get_total_rows() - 1
         self.sheet.see(last_row_index)

@@ -102,8 +102,11 @@ class Facade(FacadeInterface):
         )
         self.view.set_sheet(data)
 
-    def append_empty_row(self) -> None:
+    def append_empty_row_to_sheet(self) -> None:
         self.view.append_empty_row()
+
+    def pop_empty_row_in_sheet(self) -> None:
+        self.view.pop_last_row()
 
     def sheet_scroll_down(self) -> None:
         self.view.sheet_scroll_down()
