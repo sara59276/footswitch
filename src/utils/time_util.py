@@ -8,6 +8,11 @@ class TimeUtil:
         return datetime.now()
 
     @staticmethod
+    def get_current_year_month_day() -> tuple[str, str, str]:
+        today = TimeUtil.get_current_date()
+        return today.strftime("%Y"), today.strftime("%m"), today.strftime("%d")
+
+    @staticmethod
     def get_current_time() -> time:
         return datetime.now().time()
 

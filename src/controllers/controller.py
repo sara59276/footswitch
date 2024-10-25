@@ -1,3 +1,4 @@
+import os
 import re
 from models.data import Data
 from models.metadata import Metadata
@@ -9,6 +10,10 @@ from views.view_manager import ViewManager
 
 
 class Controller:
+
+    ROOT_DIR = os.path.abspath(os.sep)
+    DATA_DIR = os.path.join(ROOT_DIR, 'Footswitch', 'data')
+
     def __init__(
             self,
             view: ViewManager,
@@ -53,7 +58,7 @@ class Controller:
 
         except (FileExistsError, FileNotFoundError, ValueError) as e:
             self.__view.display_error(str(e))
-            raise
+            # raise
         except Exception as e:
             self.__view.display_error(str(e))
             raise
@@ -149,11 +154,16 @@ class Controller:
 
     def _initialize_filepath(self, scan_id: str, animal_id: str, experimenter_initials: str):
         self.__filepath = FileUtil.create_file(
+            destination_folder=self._get_destination_folder(),
             scan_id=scan_id,
             animal_id=animal_id,
             experimenter_initials=experimenter_initials,
             current_date=TimeUtil.get_formatted_current_date("%Y%m%d"),
         )
+
+    def _get_destination_folder(self) -> str:
+        year, month, day = TimeUtil.get_current_year_month_day()
+        return os.path.join(Controller.DATA_DIR, year, month, day)
 
     def _update_data(self) -> None:
         scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
