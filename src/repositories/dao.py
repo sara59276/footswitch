@@ -23,8 +23,11 @@ class Dao(ABC):
 class FileDao(Dao):
 
     METADATA_ROWS_COUNT = 7 # TODO - magic number
+    EMPTY_LINE: list[str] = []
 
-    def overwrite_metadata(self, filepath, content):
+    def overwrite_metadata(self, filepath, content: list[list[str]]):
+        print("in dao, overwrite metadata, content :\n", content)
+        content.append(FileDao.EMPTY_LINE)
         self._write(filepath, content)
 
     def get_data(self, filepath) -> list[list[str]]:
@@ -44,7 +47,7 @@ class FileDao(Dao):
     def _read(self, filepath, skip_rows = 0) -> list[list[str]]:
         with open(normpath(filepath), mode="r", newline="") as file:
             for _ in range(skip_rows):
-                next(file, None)
+                file.readline()
             reader = csv.reader(file)
             content = [row for row in reader]
         return content
@@ -52,10 +55,6 @@ class FileDao(Dao):
     def _write(self, filepath, content, skip_rows = 0) -> None:
         with open(normpath(filepath), mode="r+") as file:
             for _ in range(skip_rows):
-                next(file)
-            writer = csv.writer(
-                file,
-                dialect=csv.excel,
-                lineterminator="\n",
-            )
+                file.readline()
+            writer = csv.writer(file, dialect=csv.excel, lineterminator="\n",)
             writer.writerows(content)

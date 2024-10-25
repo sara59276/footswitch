@@ -44,6 +44,22 @@ class FacadeInterface(ABC):
         pass
 
     @abstractmethod
+    def activate_start_button(self) -> None:
+        pass
+
+    @abstractmethod
+    def deactivate_start_button(self) -> None:
+        pass
+
+    @abstractmethod
+    def activate_end_button(self) -> None:
+        pass
+
+    @abstractmethod
+    def deactivate_end_button(self) -> None:
+        pass
+
+    @abstractmethod
     def get_user_inputs(self) -> Tuple[str, str, str]:
         pass
 

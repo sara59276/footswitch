@@ -1,5 +1,6 @@
 import tkinter
 from tkinter import ttk
+from tkinter.constants import NORMAL, DISABLED
 
 from views.facade_interface import FacadeInterface
 from views.view import View
@@ -35,6 +36,18 @@ class Facade(FacadeInterface):
 
     def bind_close_window_button(self, on_close_window_button) -> None:
         self.view.get_root().protocol("WM_DELETE_WINDOW", on_close_window_button)
+
+    def activate_start_button(self) -> None:
+        self.view.start_btn.config(state=NORMAL)
+
+    def deactivate_start_button(self) -> None:
+        self.view.start_btn.config(state=DISABLED)
+
+    def activate_end_button(self) -> None:
+        self.view.end_btn.config(state=NORMAL)
+
+    def deactivate_end_button(self) -> None:
+        self.view.end_btn.config(state=DISABLED)
 
     def get_user_inputs(self) -> tuple[str, str, str]:
         if is_empty(self.view.scan_value.get()):

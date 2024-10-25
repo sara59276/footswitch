@@ -24,7 +24,8 @@ class Controller:
 
         self.__filepath = None
         self.__is_footswitch_pressed = False
-        self.__has_started = False
+        self.__has_session_started = False
+        self.__is_view_cleared = True
 
         self._bind()
 
@@ -32,32 +33,24 @@ class Controller:
         self.display_footswitch_connection()
         self.__view.display_footswitch_released_icon()
         self.__footswitch_monitor.start_monitoring(self.on_device_connect, self.on_device_disconnect)
+        self.__view.activate_start_button()
+        self.__view.deactivate_end_button()
         self.__view.start_mainloop()
 
     def start_session(self) -> None:
         try:
-            scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
-            self._initialize_filepath(scan_id, animal_id, experimenter_initials)
+            self._update_data()
 
             if self.__filepath:
                 self.__view.display_success(f"File created: {self.__filepath}") # TODO bug never displayed
             else:
                 raise FileNotFoundError(f"Error: File not created")
 
-            self.__metadata.set_starting_metadata(
-                filepath=self.__filepath,
-                scan_id=scan_id,
-                animal_id=animal_id,
-                experimenter_initials=experimenter_initials,
-            )
-            self.__data.update(
-                self.__filepath,
-            )
-
             self.__view.clear_msg()
             self.__view.disable_user_inputs()
-            self._load_sheet_content()
-            self.__has_started = True
+            self.__view.deactivate_start_button()
+            self.__view.activate_end_button()
+            self.__has_session_started = True
 
         except (FileExistsError, FileNotFoundError, ValueError) as e:
             self.__view.display_error(str(e))
@@ -67,16 +60,19 @@ class Controller:
             raise
 
     def end_session(self) -> None:
-        self.__metadata.set_session_end(self.__filepath)
-        FileUtil.set_readonly(self.__filepath)
+        if self.__filepath:
+            self.__metadata.set_session_end(self.__filepath)
+        self.__view.deactivate_end_button()
+        self.__has_session_started = False
 
     def clear_session(self) -> None:
+        self.end_session()
+        if self.__filepath:
+            FileUtil.set_readonly(self.__filepath)
+            self.__filepath = None
         self.__view.reset_view()
         self.__view.enable_user_inputs()
-
-        FileUtil.set_readonly(self.__filepath)
-        self.__has_started = False
-
+        self.__view.activate_start_button()
 
     def display_footswitch_connection(self) -> None:
         is_detected = self.__footswitch_monitor.is_footswitch_connected()
@@ -85,7 +81,7 @@ class Controller:
     def footswitch_pressed(self, event) -> None:
         self.__view.display_footswitch_pressed_icon()
 
-        if self.__has_started and not self.__is_footswitch_pressed:
+        if self.__has_session_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
             current_time = TimeUtil.get_formatted_current_time()
             self.__view.add_start_time(current_time)
@@ -93,7 +89,7 @@ class Controller:
     def footswitch_released(self, event) -> None:
         self.__view.display_footswitch_released_icon()
 
-        if self.__has_started:
+        if self.__has_session_started:
             self.__is_footswitch_pressed = False
 
             current_time = TimeUtil.get_formatted_current_time()
@@ -159,7 +155,19 @@ class Controller:
             current_date=TimeUtil.get_formatted_current_date("%Y%m%d"),
         )
 
-    def _load_sheet_content(self) -> None:
+    def _update_data(self) -> None:
+        scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
+        self._initialize_filepath(scan_id, animal_id, experimenter_initials)
+
+        self.__metadata.set_starting_metadata(
+            filepath=self.__filepath,
+            scan_id=scan_id,
+            animal_id=animal_id,
+            experimenter_initials=experimenter_initials,
+        )
+        self.__data.update(
+            self.__filepath,
+        )
         data = self.__data.get(self.__filepath)
         self.__view.set_sheet(data)
 
