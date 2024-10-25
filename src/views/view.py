@@ -22,26 +22,6 @@ class View(ttk.Frame):
     def get_root(self):
         return self.__container
 
-    def populate_sheet(self, data) -> None:
-        self.sheet.set_sheet_data(data)
-        self.append_empty_row()
-
-    def append_empty_row(self) -> None:
-        if self._is_sheet_populated():
-            self.sheet.insert_row()
-
-    def pop_last_row(self) -> None:
-        if self._is_sheet_populated():
-            last_row_idx = self.sheet.get_total_rows() - 1
-            self.sheet.del_row(idx=last_row_idx)
-
-    def _is_sheet_populated(self) -> bool:
-        return self.sheet.get_total_rows() > 0 and self.sheet.get_total_columns() > 0
-
-    def sheet_scroll_down(self) -> None:
-        last_row_index = self.sheet.get_total_rows() - 1
-        self.sheet.see(last_row_index)
-
     def _initialize_value_vars(self) -> None:
         self.scan_value = StringVar()
         self.animal_value = StringVar()

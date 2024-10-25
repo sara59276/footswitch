@@ -100,16 +100,30 @@ class Facade(FacadeInterface):
             self.view.sheet.span("A1"),
             readonly=True,
         )
-        self.view.populate_sheet(data)
+        self.set_sheet_content(data)
+
+    def set_sheet_content(self, data) -> None:
+        self.view.sheet.set_sheet_data(data)
+        self.append_empty_row_to_sheet()
+
+    def get_sheet_content(self) -> object:
+        return self.view.sheet.data
 
     def append_empty_row_to_sheet(self) -> None:
-        self.view.append_empty_row()
+        if self._is_sheet_populated():
+            self.view.sheet.insert_row()
 
     def pop_empty_row_in_sheet(self) -> None:
-        self.view.pop_last_row()
+        if self._is_sheet_populated():
+            last_row_idx = self.view.sheet.get_total_rows() - 1
+            self.view.sheet.del_row(idx=last_row_idx)
+
+    def _is_sheet_populated(self) -> bool:
+        return self.view.sheet.get_total_rows() > 0 and self.view.sheet.get_total_columns() > 0
 
     def sheet_scroll_down(self) -> None:
-        self.view.sheet_scroll_down()
+        last_row_index = self.view.sheet.get_total_rows() - 1
+        self.view.sheet.see(last_row_index)
 
     def display_footswitch_released_icon(self) -> None:
         self.view.fs_pressed_icon_label.grid_forget()
@@ -142,9 +156,6 @@ class Facade(FacadeInterface):
         self.reset_user_inputs()
         self.view.sheet.reset()
         self.view.msg_value.set("")
-
-    def get_sheet_content(self) -> object:
-        return self.view.sheet.data
 
     def get_root(self):
         return self.view.get_root()
