@@ -2,10 +2,7 @@ import csv
 import os
 import platform
 from datetime import datetime
-from os.path import normpath
 from stat import S_IREAD
-
-from models.metadata import Metadata
 
 
 class FileUtil:
@@ -20,15 +17,16 @@ class FileUtil:
         return os.path.join(app_data_directory, current_year, current_month, current_day)
 
     @staticmethod
-    def create_file(destination_folder: str, scan_id: str, animal_id: str, experimenter_initials: str, current_date: str) -> str:
+    def create_file(scan_id: str, animal_id: str, experimenter_initials: str, current_date: str) -> str:
         filename = f"{scan_id}_{animal_id}_{experimenter_initials}_{current_date}.csv"
-        filepath = os.path.join(destination_folder, filename)
-        with open(filepath, mode='w', newline='', encoding='utf-8') as file:
-            pass
+
+        dest_folder = FileUtil.get_destination_folder()
+        filepath = os.path.join(dest_folder, filename)
+        FileUtil.create_new_file(filepath)
         return filepath
 
     @staticmethod
-    def create_new_file(filepath: str, header) -> None:
+    def create_new_file(filepath: str) -> None:
         directory = os.path.dirname(filepath)
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -36,8 +34,7 @@ class FileUtil:
 
         if not os.path.exists(filepath):
             with open(filepath, mode="w", newline="") as file:
-                writer = csv.writer(file)
-                writer.writerow(header)
+                pass
             print(f"Created new file : {filepath}")
         else:
             raise FileExistsError(f"This file already exists: {filepath}")

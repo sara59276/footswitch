@@ -71,11 +71,12 @@ class Controller:
         FileUtil.set_readonly(self.__filepath)
 
     def clear_session(self) -> None:
+        self.__view.reset_view()
+        self.__view.enable_user_inputs()
+
         FileUtil.set_readonly(self.__filepath)
         self.__has_started = False
 
-        self.__view.reset_view()
-        self.__view.enable_user_inputs()
 
     def display_footswitch_connection(self) -> None:
         is_detected = self.__footswitch_monitor.is_footswitch_connected()
@@ -151,15 +152,12 @@ class Controller:
         )
 
     def _initialize_filepath(self, scan_id: str, animal_id: str, experimenter_initials: str):
-        print("creating file")
         self.__filepath = FileUtil.create_file(
-            destination_folder=FileUtil.get_destination_folder(),
             scan_id=scan_id,
             animal_id=animal_id,
             experimenter_initials=experimenter_initials,
             current_date=TimeUtil.get_formatted_current_date("%Y%m%d"),
         )
-        print("created file : ", self.__filepath)
 
     def _load_sheet_content(self) -> None:
         data = self.__data.get(self.__filepath)
