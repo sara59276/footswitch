@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-
 from repositories.dao import FileDao
 from repositories.exception import RepositoryException
 

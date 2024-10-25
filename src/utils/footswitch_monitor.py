@@ -1,6 +1,5 @@
 from usbmonitor import USBMonitor
 from usbmonitor.attributes import ID_MODEL_ID, ID_VENDOR_ID
-
 from config.config_manager import ConfigManager
 
 class FootswitchMonitor:

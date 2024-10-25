@@ -1,12 +1,10 @@
 import tkinter
 from tkinter import ttk
 from tkinter.constants import NORMAL, DISABLED
-
-from views.facade_interface import FacadeInterface
 from views.view import View
 
 
-class Facade(FacadeInterface):
+class ViewManager:
     def __init__(self, view: View):
         self.view = view
         self._initialize_styles()

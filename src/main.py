@@ -1,7 +1,7 @@
 from controllers.controller import Controller
 from models.data import Data
 from models.metadata import Metadata
-from views.facade import Facade
+from views.view_manager import ViewManager
 from views.root import Root
 from views.view import View
 
@@ -12,7 +12,7 @@ def main():
 
     root = Root()
     view = View(root)
-    facade = Facade(view)
+    facade = ViewManager(view)
 
     controller = Controller(facade, metadata, data)
     controller.start_app()

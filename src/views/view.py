@@ -1,7 +1,5 @@
-from tkinter import ttk, StringVar, Entry
-
 import tksheet
-
+from tkinter import ttk, StringVar, Entry
 from utils.image_utils import ImageUtil
 
 

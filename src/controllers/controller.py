@@ -1,18 +1,17 @@
 import re
-
 from models.data import Data
 from models.metadata import Metadata
 from config.config_manager import ConfigManager
 from utils.file_utils import FileUtil
 from utils.footswitch_monitor import FootswitchMonitor
 from utils.time_util import TimeUtil
-from views.facade_interface import FacadeInterface
+from views.view_manager import ViewManager
 
 
 class Controller:
     def __init__(
             self,
-            view: FacadeInterface,
+            view: ViewManager,
             metadata: Metadata,
             data: Data,
     ):
