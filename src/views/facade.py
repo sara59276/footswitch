@@ -100,7 +100,7 @@ class Facade(FacadeInterface):
             self.view.sheet.span("A1"),
             readonly=True,
         )
-        self.view.set_sheet(data)
+        self.view.populate_sheet(data)
 
     def append_empty_row_to_sheet(self) -> None:
         self.view.append_empty_row()
