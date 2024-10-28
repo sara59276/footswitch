@@ -44,6 +44,12 @@ class Metadata:
         self.__session_end = TimeUtil.get_formatted_current_time(msec_digits=0)
         self._update_repository(filepath)
 
+    def get_session_start(self) -> str:
+        return self.__session_start
+
+    def get_session_end(self) -> str:
+        return self.__session_end
+
     def _update_repository(self, filepath):
         self.__repo.overwrite_metadata(filepath, self._convert_to_csv())
 

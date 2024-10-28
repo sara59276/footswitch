@@ -26,23 +26,27 @@ class View(ttk.Frame):
         self.experimenter_value = StringVar()
         self.device_value = StringVar()
         self.msg_value = StringVar()
+        self.session_start_value = StringVar()
+        self.session_end_value = StringVar()
 
     def _initialize_frames(self) -> None:
         self.entries_frame = ttk.Frame(self)
+        self.msg_frame = ttk.Frame(self)
+        self.device_connection_frame = ttk.Frame(self)
         self.sheet_frame = ttk.Frame(self)
         self.control_frame = ttk.Frame(self)
-        self.device_connection_frame = ttk.Frame(self)
-        self.msg_frame = ttk.Frame(self)
+        self.session_times_frame = ttk.Frame(self)
 
     def _initialize_widgets(self) -> None:
         self._initialize_scan()
         self._initialize_animal()
         self._initialize_experimenter()
-        self._initialize_sheet()
-        self._initialize_control_buttons()
+        self._initialize_msg_label()
         self._initialize_footswitch_icon_labels()
         self._initialize_device_connection_label()
-        self._initialize_msg_label()
+        self._initialize_sheet()
+        self._initialize_control_buttons()
+        self._initialize_session_times_labels()
 
     def _initialize_scan(self) -> None:
         self.scan_label = ttk.Label(
@@ -80,6 +84,48 @@ class View(ttk.Frame):
             validate="key",
         )
 
+    def _initialize_footswitch_icon_labels(self) -> None:
+        self.fs_released_icon = ImageUtil.get_image("footswitch_released_icon.png")
+        self.fs_released_icon_label = ttk.Label(
+            self.device_connection_frame,
+            image=self.fs_released_icon
+        )
+        self.fs_pressed_icon = ImageUtil.get_image("footswitch_pressed_icon.png")
+        self.fs_pressed_icon_label = ttk.Label(
+            self.device_connection_frame,
+            image=self.fs_pressed_icon
+        )
+
+    def _initialize_device_connection_label(self) -> None:
+        self.device_connection_label = ttk.Label(
+        self.device_connection_frame,
+        textvariable=self.device_value,
+        )
+
+    def _initialize_msg_label(self) -> None:
+        self.msg_label = ttk.Label(
+            self.msg_frame,
+            textvariable=self.msg_value,
+        )
+
+    def _initialize_session_times_labels(self) -> None:
+        self.session_start_text = ttk.Label(
+            self.session_times_frame,
+            text="Session start: ",
+        )
+        self.session_start_label = ttk.Label(
+            self.session_times_frame,
+            textvariable=self.session_start_value,
+        )
+        self.session_end_text = ttk.Label(
+            self.session_times_frame,
+            text="Session end: "
+        )
+        self.session_end_label = ttk.Label(
+            self.session_times_frame,
+            textvariable=self.session_end_value,
+        )
+
     def _initialize_sheet(self) -> None:
         self.sheet = tksheet.Sheet(
             self.sheet_frame,
@@ -113,36 +159,13 @@ class View(ttk.Frame):
         for button in (self.start_btn, self.end_btn, self.clear_btn):
             button.config(width=15, padding=30)
 
-    def _initialize_footswitch_icon_labels(self) -> None:
-        self.fs_released_icon = ImageUtil.get_image("footswitch_released_icon.png")
-        self.fs_released_icon_label = ttk.Label(
-            self.device_connection_frame,
-            image=self.fs_released_icon
-        )
-        self.fs_pressed_icon = ImageUtil.get_image("footswitch_pressed_icon.png")
-        self.fs_pressed_icon_label = ttk.Label(
-            self.device_connection_frame,
-            image=self.fs_pressed_icon
-        )
-
-    def _initialize_device_connection_label(self) -> None:
-        self.device_connection_label = ttk.Label(
-            self.device_connection_frame,
-            textvariable=self.device_value,
-        )
-
-    def _initialize_msg_label(self) -> None:
-        self.msg_label = ttk.Label(
-            self.msg_frame,
-            textvariable=self.msg_value,
-        )
-
     def _display_frames(self) -> None:
         self.entries_frame.grid(row=0, column=0, padx=20, pady=20)
         self.device_connection_frame.grid(row=0, column=1, padx=10, pady=20)
-        self.msg_frame.grid(row=1, column=0, sticky="nsew", padx=20)
-        self.sheet_frame.grid(row=2, column=0, padx=20, pady=20)
-        self.control_frame.grid(row=2, column=1, sticky="ew", padx=20, pady=20)
+        self.msg_frame.grid(row=1, column=0, padx=20, sticky="nsew")
+        self.sheet_frame.grid(row=2, column=0, padx=20, pady=20, rowspan=2)
+        self.session_times_frame.grid(row=2, column=1, padx=20, pady=20, sticky="ew")
+        self.control_frame.grid(row=3, column=1, padx=20, pady=20, sticky="ew")
 
     def _display_widgets(self) -> None:
         self.scan_label.grid(row=0, column=0, sticky="e", padx=5)
@@ -151,10 +174,13 @@ class View(ttk.Frame):
         self.animal_entry.grid(row=0, column=3, sticky="w", padx=5)
         self.experimenter_label.grid(row=0, column=4, sticky="e", padx=5)
         self.experimenter_entry.grid(row=0, column=5, sticky="w", padx=5)
+        self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
+        self.session_start_text.grid(row=0, column=0, padx=5)
+        self.session_start_label.grid(row=0, column=1, padx=5)
+        self.session_end_text.grid(row=1, column=0, padx=5)
+        self.session_end_label.grid(row=1, column=1, padx=5)
         self.sheet.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.start_btn.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
         self.end_btn.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
         self.clear_btn.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
         self.device_connection_label.grid(row=0, column=1, sticky="ew", padx=5)
-        self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
-

@@ -46,7 +46,7 @@ class Controller:
             self._update_data()
 
             if self.__filepath:
-                self.__view.display_success(f"File created: {self.__filepath}") # TODO bug never displayed
+                self.__view.display_success(f"File created: {self.__filepath}") # TODO bug - never displayed
             else:
                 raise FileNotFoundError(f"Error: File not created")
 
@@ -54,6 +54,8 @@ class Controller:
             self.__view.disable_user_inputs()
             self.__view.deactivate_start_button()
             self.__view.activate_end_button()
+            session_start_time = self.__metadata.get_session_start()
+            self.__view.display_session_start(session_start_time)
             self.__has_session_started = True
 
         except (FileExistsError, FileNotFoundError, ValueError) as e:
@@ -68,6 +70,8 @@ class Controller:
             self.__metadata.set_session_end(self.__filepath)
         self.__view.deactivate_end_button()
         self.__view.pop_empty_row_in_sheet()
+        session_end_time = self.__metadata.get_session_end()
+        self.__view.display_session_end(session_end_time)
         self.__has_session_started = False
 
     def clear_session(self) -> None:

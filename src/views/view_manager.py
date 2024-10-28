@@ -1,6 +1,9 @@
 import tkinter
 from tkinter import ttk
 from tkinter.constants import NORMAL, DISABLED
+
+from Demos.win32ts_logoff_disconnected import session
+
 from views.view import View
 
 
@@ -77,6 +80,12 @@ class ViewManager:
         self.__view.animal_entry.delete(0, tkinter.END)
         self.__view.experimenter_entry.delete(0, tkinter.END)
 
+    def display_session_start(self, session_start):
+        self.__view.session_start_value.set(session_start)
+
+    def display_session_end(self, session_end):
+        self.__view.session_end_value.set(session_end)
+
     def add_start_time(self, start_time):
         start_time_col = "B"
         last_row_index = self.__view.sheet.get_total_rows()
@@ -152,8 +161,10 @@ class ViewManager:
 
     def reset_view(self) -> None:
         self.reset_user_inputs()
-        self.__view.sheet.reset()
         self.__view.msg_value.set("")
+        self.__view.session_start_value.set("")
+        self.__view.session_end_value.set("")
+        self.__view.sheet.reset()
 
     def get_root(self):
         return self.__view.get_root()
