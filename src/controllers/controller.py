@@ -171,6 +171,8 @@ class Controller:
 
     def _update_data(self) -> None:
         scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
+        experimenter_initials = experimenter_initials.upper()
+
         self._initialize_filepath(scan_id, animal_id, experimenter_initials)
 
         self.__metadata.set_starting_metadata(
