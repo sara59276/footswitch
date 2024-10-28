@@ -58,5 +58,5 @@ pip freeze > requirements.txt
 ## How to generate the executable
 ```
 pip install pyinstaller
-pyinstaller.exe --noconsole --onefile --name FootSwitch_App --icon=src/resources/images/app_icon.png --add-data "src/resources/images;resources/images" .\src\main.py
+pyinstaller.exe --noconsole --onefile --name FootSwitch_App_v1.2.1 --icon=src/resources/images/app_icon.png --add-data "src/resources/images;resources/images" --add-data "src/resources/config/config.ini;resources/config" .\src\main.py
 ```
