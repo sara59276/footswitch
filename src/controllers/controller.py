@@ -1,8 +1,10 @@
 import os
 import re
+from tkinter import messagebox
+
+from config.config_manager import ConfigManager
 from models.data import Data
 from models.metadata import Metadata
-from config.config_manager import ConfigManager
 from utils.file_utils import FileUtil
 from utils.footswitch_monitor import FootswitchMonitor
 from utils.time_util import TimeUtil
@@ -25,7 +27,6 @@ class Controller:
         self.__view = view
 
         self.__footswitch_monitor = FootswitchMonitor()
-
         self.__filepath = None
         self.__is_footswitch_pressed = False
         self.__has_session_started = False
@@ -75,6 +76,15 @@ class Controller:
         self.__has_session_started = False
 
     def clear_session(self) -> None:
+        if self.__view.sheet_contains_empty_events():
+            has_cancelled = messagebox.askokcancel(
+                "Warning",
+                "Empty event(s) detected.\nDo you still want to clear ?",
+                icon='warning',
+            )
+            if not has_cancelled:
+                return
+            
         self.end_session()
         if self.__filepath:
             FileUtil.set_readonly(self.__filepath)

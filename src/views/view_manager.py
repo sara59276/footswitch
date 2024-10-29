@@ -2,8 +2,6 @@ import tkinter
 from tkinter import ttk
 from tkinter.constants import NORMAL, DISABLED
 
-from Demos.win32ts_logoff_disconnected import session
-
 from views.view import View
 
 
@@ -165,6 +163,10 @@ class ViewManager:
         self.__view.session_start_value.set("")
         self.__view.session_end_value.set("")
         self.__view.sheet.reset()
+
+    def sheet_contains_empty_events(self) -> bool:
+        events_column = self.__view.sheet["A"].data
+        return any(cell == "" or cell is None for cell in events_column[1:-1])
 
     def get_root(self):
         return self.__view.get_root()
