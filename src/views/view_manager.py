@@ -120,8 +120,13 @@ class ViewManager:
 
     def pop_empty_row_in_sheet(self) -> None:
         if self._is_sheet_populated():
-            last_row_idx = self.__view.sheet.get_total_rows() - 1
-            self.__view.sheet.del_row(idx=last_row_idx)
+            last_row_idx = self.__view.sheet.get_total_rows()
+            last_row_data = self.__view.sheet.get_row_data(last_row_idx)
+
+            if all(cell in (None, "", " ") or (isinstance(cell, str) and cell.isspace()) for cell in last_row_data):
+                self.__view.sheet.del_row(idx=last_row_idx)
+            else:
+                raise Exception("Trying to delete non empty row !")
 
     def _is_sheet_populated(self) -> bool:
         return self.__view.sheet.get_total_rows() > 0 and self.__view.sheet.get_total_columns() > 0
@@ -166,7 +171,7 @@ class ViewManager:
 
     def sheet_contains_empty_events(self) -> bool:
         events_column = self.__view.sheet["A"].data
-        return any(cell == "" or cell is None for cell in events_column[1:-1])
+        return any(cell in (None, "") or (isinstance(cell, str) and cell.isspace()) for cell in events_column[1:-1])
 
     def get_root(self):
         return self.__view.get_root()

@@ -26,7 +26,6 @@ class FileDao(Dao):
     EMPTY_LINE: list[str] = []
 
     def overwrite_metadata(self, filepath, content: list[list[str]]):
-        print("in dao, overwrite metadata, content :\n", content)
         content.append(FileDao.EMPTY_LINE)
         self._write(filepath, content)
 

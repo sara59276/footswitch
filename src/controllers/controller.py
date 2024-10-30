@@ -84,7 +84,7 @@ class Controller:
             )
             if not has_cancelled:
                 return
-            
+
         self.end_session()
         if self.__filepath:
             FileUtil.set_readonly(self.__filepath)
