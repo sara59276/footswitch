@@ -11,7 +11,7 @@ from utils.time_util import TimeUtil
 from views.view_manager import ViewManager
 
 
-class Controller:
+class Presenter:
 
     ROOT_DIR = os.path.abspath(os.sep)
     DATA_DIR = os.path.join(ROOT_DIR, 'Footswitch', 'data')
@@ -177,7 +177,7 @@ class Controller:
 
     def _get_destination_folder(self) -> str:
         year, month, day = TimeUtil.get_current_year_month_day()
-        return os.path.join(Controller.DATA_DIR, year, month, day)
+        return os.path.join(Presenter.DATA_DIR, year, month, day)
 
     def _update_data(self) -> None:
         scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()

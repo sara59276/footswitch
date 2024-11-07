@@ -1,4 +1,4 @@
-from controllers.controller import Controller
+from presenters.presenter import Presenter
 from models.data import Data
 from models.metadata import Metadata
 from views.view_manager import ViewManager
@@ -14,8 +14,8 @@ def main():
     view = View(root)
     facade = ViewManager(view)
 
-    controller = Controller(facade, metadata, data)
-    controller.start_app()
+    presenter = Presenter(facade, metadata, data)
+    presenter.start_app()
 
 if __name__ == "__main__":
     main()
