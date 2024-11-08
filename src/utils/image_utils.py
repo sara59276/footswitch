@@ -2,14 +2,14 @@ from pathlib import Path
 from PIL import Image, ImageTk
 from PIL.ImageTk import PhotoImage
 
+from constants.app_directory import APP_DIRECTORY
+
 
 class ImageUtil:
 
     @staticmethod
     def get_filepath(filename: str) -> Path:
-        base_dir = Path(__file__).resolve().parent
-        src_dir = base_dir.parent
-        return src_dir / 'resources' / 'images' / filename
+        return APP_DIRECTORY / 'resources' / 'images' / filename
 
     @staticmethod
     def get_image(filename: str, width: int = 30, height: int = 30) -> PhotoImage:
