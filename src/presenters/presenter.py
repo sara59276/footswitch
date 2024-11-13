@@ -1,5 +1,4 @@
 import os
-import re
 from tkinter import messagebox
 
 from config.config_manager import ConfigManager
@@ -31,7 +30,9 @@ class Presenter:
         self.__filepath = None
         self.__is_footswitch_pressed = False
         self.__has_session_started = False
-        self.__is_view_cleared = True
+
+        self.__current_start_datetime = None
+        self.__current_end_datetime = None
 
         self._bind()
 
@@ -90,9 +91,7 @@ class Presenter:
                 return
 
         self.end_session()
-        if self.__filepath:
-            FileUtil.set_readonly(self.__filepath)
-            self.__filepath = None
+        self._reset_attributes()
         self.__view.reset_view()
         self.__view.enable_user_inputs()
         self.__view.activate_start_button()
@@ -106,8 +105,13 @@ class Presenter:
 
         if self.__has_session_started and not self.__is_footswitch_pressed:
             self.__is_footswitch_pressed = True
-            current_time = TimeUtil.get_formatted_current_time()
-            self.__view.add_start_time(current_time)
+
+            start_time = TimeUtil.get_formatted_current_time()
+            self.__view.add_start_time(start_time)
+            self.__current_start_datetime = TimeUtil.get_current_date()
+
+            updated_data = self.__view.get_sheet_content()
+            self.__data.update(self.__filepath, updated_data)
 
     def footswitch_released(self, event) -> None:
         self.__view.display_footswitch_released_icon()
@@ -115,21 +119,19 @@ class Presenter:
         if self.__has_session_started:
             self.__is_footswitch_pressed = False
 
-            current_time = TimeUtil.get_formatted_current_time()
-            self.__view.add_end_time(current_time)
+            end_time = TimeUtil.get_formatted_current_time()
+            self.__view.add_end_time(end_time)
+            self.__current_end_datetime = TimeUtil.get_current_date()
+
+            mean_time = TimeUtil.get_formatted_midpoint_time(
+                self.__current_start_datetime,
+                self.__current_end_datetime,
+            )
+            self.__view.add_mean_time(mean_time)
 
             updated_data = self.__view.get_sheet_content()
             self.__data.update(self.__filepath, updated_data)
             self.__view.sheet_scroll_down()
-
-    def validate_scan_and_animal_inputs(self, value) -> bool:
-        return StringUtils.is_filename_friendly_character(value)
-
-    def validate_experimenter_input(self, value) -> bool:
-        return StringUtils.is_letter(value)
-
-    def validate_delay_input(self, value) -> bool:
-        return StringUtils.is_digit(value)
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()
@@ -159,9 +161,9 @@ class Presenter:
             self.footswitch_released,
         )
         self.__view.bind_entry_constraints(
-            self.validate_scan_and_animal_inputs,
-            self.validate_experimenter_input,
-            self.validate_delay_input,
+            StringUtils.is_filename_friendly_character,
+            StringUtils.is_letter,
+            StringUtils.is_digit,
         )
         self.__view.bind_sheet(
             self.on_sheet_modified,
@@ -205,3 +207,11 @@ class Presenter:
     def _get_footswitch_key(self) -> str:
         config = ConfigManager()
         return config.get("footswitch_key")
+
+    def _reset_attributes(self) -> None:
+        if self.__filepath:
+            FileUtil.set_readonly(self.__filepath)
+            self.__filepath = None
+
+        self.__current_start_datetime = None
+        self.__current_end_datetime = None

@@ -1,6 +1,5 @@
 import configparser
 import os
-from pathlib import Path
 
 from constants.app_directory import APP_DIRECTORY
 

@@ -151,7 +151,7 @@ class View(ttk.Frame):
             self.sheet_frame,
             width=580,
             height=450,
-            default_column_width=170,
+            default_column_width=135,
         )
         self.sheet.enable_bindings("single_select",
                                "row_select",

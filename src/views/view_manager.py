@@ -11,6 +11,7 @@ class ViewManager:
     EVENT_COLUMN = "A"
     START_TIME_COLUMN = "B"
     END_TIME_COLUMN = "C"
+    MEAN_TIME_COLUMN = "D"
 
     def __init__(self, view: View):
         self.__view = view
@@ -101,14 +102,22 @@ class ViewManager:
         self.__view.session_end_value.set(session_end)
 
     def add_start_time(self, start_time):
-        appended_row_index = self.__view.sheet.get_total_rows() + 1
-        start_time_cell = f"{ViewManager.START_TIME_COLUMN}{appended_row_index}"
+        new_row_index = self._get_current_rows_count() + 1
+        start_time_cell = f"{ViewManager.START_TIME_COLUMN}{new_row_index}"
         self.__view.sheet.span(start_time_cell).data = [start_time]
 
     def add_end_time(self, end_time):
         last_row_index = self.__view.sheet.get_total_rows()
         start_time_cell = f"{ViewManager.END_TIME_COLUMN}{last_row_index}"
         self.__view.sheet.span(start_time_cell).data = [end_time]
+
+    def add_mean_time(self, mean_time):
+        last_row_index = self.__view.sheet.get_total_rows()
+        mean_time_cell = f"{ViewManager.MEAN_TIME_COLUMN}{last_row_index}"
+        self.__view.sheet.span(mean_time_cell).data = [mean_time]
+
+    def _get_current_rows_count(self) -> int:
+        return self.__view.sheet.get_total_rows()
 
     def set_sheet(self, data) -> None:
         self._enable_user_cell_modification_event_column_only()

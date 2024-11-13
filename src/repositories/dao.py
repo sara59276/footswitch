@@ -1,6 +1,6 @@
-import csv
 from abc import ABC, abstractmethod
-from os.path import normpath
+
+from utils.file_utils import FileUtil
 
 
 class Dao(ABC):
@@ -27,13 +27,13 @@ class FileDao(Dao):
 
     def overwrite_metadata(self, filepath, content: list[list[str]]):
         content.append(FileDao.EMPTY_LINE)
-        self._write(filepath, content)
+        FileUtil.write(filepath, content)
 
     def get_data(self, filepath) -> list[list[str]]:
-        return self._read(filepath, skip_rows=self.__class__.METADATA_ROWS_COUNT)
+        return FileUtil.read(filepath, skip_rows=self.__class__.METADATA_ROWS_COUNT)
 
     def overwrite_data(self, filepath, content):
-        self._write(filepath, content, skip_rows=self.__class__.METADATA_ROWS_COUNT)
+        FileUtil.write(filepath, content, skip_rows=self.__class__.METADATA_ROWS_COUNT)
 
     def clear_data(self, filepath):
         skip_rows = self.__class__.METADATA_ROWS_COUNT
@@ -42,18 +42,3 @@ class FileDao(Dao):
                 file.readline()
             file.seek(file.tell())
             file.truncate()
-
-    def _read(self, filepath, skip_rows = 0) -> list[list[str]]:
-        with open(normpath(filepath), mode="r", newline="") as file:
-            for _ in range(skip_rows):
-                file.readline()
-            reader = csv.reader(file)
-            content = [row for row in reader]
-        return content
-
-    def _write(self, filepath, content, skip_rows = 0) -> None:
-        with open(normpath(filepath), mode="r+") as file:
-            for _ in range(skip_rows):
-                file.readline()
-            writer = csv.writer(file, dialect=csv.excel, lineterminator="\n",)
-            writer.writerows(content)

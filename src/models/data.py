@@ -3,7 +3,7 @@ from repositories.repository import FileRepository
 
 class Data:
 
-    HEADER = [['event', 'start_time', 'end_time']]
+    HEADER = [['event', 'start_time', 'end_time', 'mean_time']]
 
     def __init__(self):
         self.__repo = FileRepository()
