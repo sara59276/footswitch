@@ -28,13 +28,17 @@ class ViewManager:
         self.__view.master.bind(f"<{footswitch_key}>", footswitch_pressed)
         self.__view.master.bind(f"<KeyRelease-{footswitch_key}>", footswitch_released)
 
-    def bind_entry_constraints(self, validate_scan_and_animal_inputs, validate_experimenter_input) -> None:
-        validate_file_compatible = (self.__view.register(validate_scan_and_animal_inputs), "%S")
-        self.__view.scan_entry.config(validatecommand=validate_file_compatible)
-        self.__view.animal_entry.config(validatecommand=validate_file_compatible)
+    def bind_entry_constraints(self, validate_scan_and_animal_inputs,
+                               validate_experimenter_input, validate_delay_input) -> None:
+        validate_filename_compatible = (self.__view.register(validate_scan_and_animal_inputs), "%S")
+        self.__view.scan_entry.config(validatecommand=validate_filename_compatible)
+        self.__view.animal_entry.config(validatecommand=validate_filename_compatible)
 
         validate_initials = (self.__view.register(validate_experimenter_input), "%S")
         self.__view.experimenter_entry.config(validatecommand=validate_initials)
+
+        validate_digits_only = (self.__view.register(validate_delay_input), "%S")
+        self.__view.delay_entry.config(validatecommand=validate_digits_only)
 
     def bind_sheet(self, on_sheet_modified) -> None:
         self.__view.sheet.bind("<<SheetModified>>", on_sheet_modified)
@@ -54,35 +58,41 @@ class ViewManager:
     def deactivate_end_button(self) -> None:
         self.__view.end_btn.config(state=DISABLED)
 
-    def get_user_inputs(self) -> tuple[str, str, str]:
+    def get_user_inputs(self) -> tuple[str, str, str, str]:
         if StringUtils.is_empty(self.__view.scan_value.get()):
             raise ValueError("Scan ID is empty")
         if StringUtils.is_empty(self.__view.animal_value.get()):
             raise ValueError("Animal ID is empty")
         if StringUtils.is_empty(self.__view.experimenter_value.get()):
             raise ValueError("Experimenter ID is empty")
+        if StringUtils.is_empty(self.__view.delay_value.get()):
+            raise ValueError("Delay is empty")
         if StringUtils.is_invalid_initials(self.__view.experimenter_value.get()):
-            raise ValueError("Experimenter initials should be of length 2 to 3")
+            raise ValueError("Experimenter initials should be 2 to 3 characters long")
 
         return (self.__view.scan_value.get(),
                 self.__view.animal_value.get(),
-                self.__view.experimenter_value.get())
+                self.__view.experimenter_value.get(),
+                self.__view.delay_value.get())
 
     def enable_user_inputs(self) -> None:
         self.__view.scan_entry.config(state="normal")
         self.__view.animal_entry.config(state="normal")
         self.__view.experimenter_entry.config(state="normal")
+        self.__view.delay_entry.config(state="normal")
 
     def disable_user_inputs(self) -> None:
         self.__view.scan_entry.config(state="disabled")
         self.__view.animal_entry.config(state="disabled")
         self.__view.experimenter_entry.config(state="disabled")
+        self.__view.delay_entry.config(state="disabled")
 
     def reset_user_inputs(self) -> None:
         self.enable_user_inputs()
         self.__view.scan_entry.delete(0, tkinter.END)
         self.__view.animal_entry.delete(0, tkinter.END)
         self.__view.experimenter_entry.delete(0, tkinter.END)
+        self.__view.delay_entry.delete(0, tkinter.END)
 
     def display_session_start(self, session_start):
         self.__view.session_start_value.set(session_start)

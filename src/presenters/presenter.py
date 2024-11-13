@@ -129,6 +129,10 @@ class Presenter:
         pattern = r'^[A-Za-z]+$'
         return bool(re.fullmatch(pattern, value))
 
+    def validate_delay_input(self, value) -> bool:
+        pattern = r'^\d+$'
+        return bool(re.fullmatch(pattern, value))
+
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()
         self.__data.update(self.__filepath, data)
@@ -159,6 +163,7 @@ class Presenter:
         self.__view.bind_entry_constraints(
             self.validate_scan_and_animal_inputs,
             self.validate_experimenter_input,
+            self.validate_delay_input,
         )
         self.__view.bind_sheet(
             self.on_sheet_modified,
@@ -181,7 +186,7 @@ class Presenter:
         return os.path.join(Presenter.DATA_DIR, year, month, day)
 
     def _update_data(self) -> None:
-        scan_id, animal_id, experimenter_initials = self.__view.get_user_inputs()
+        scan_id, animal_id, experimenter_initials, delay = self.__view.get_user_inputs()
         experimenter_initials = experimenter_initials.upper()
 
         self._initialize_filepath(scan_id, animal_id, experimenter_initials)
@@ -191,6 +196,7 @@ class Presenter:
             scan_id=scan_id,
             animal_id=animal_id,
             experimenter_initials=experimenter_initials,
+            delay=delay,
         )
         self.__data.update(
             self.__filepath,

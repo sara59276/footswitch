@@ -22,7 +22,7 @@ class Dao(ABC):
 
 class FileDao(Dao):
 
-    METADATA_ROWS_COUNT = 7 # TODO - magic number
+    METADATA_ROWS_COUNT = 8 # TODO - magic number
     EMPTY_LINE: list[str] = []
 
     def overwrite_metadata(self, filepath, content: list[list[str]]):

@@ -24,6 +24,7 @@ class View(ttk.Frame):
         self.scan_value = StringVar()
         self.animal_value = StringVar()
         self.experimenter_value = StringVar()
+        self.delay_value = StringVar()
         self.device_value = StringVar()
         self.msg_value = StringVar()
         self.session_start_value = StringVar()
@@ -41,6 +42,7 @@ class View(ttk.Frame):
         self._initialize_scan()
         self._initialize_animal()
         self._initialize_experimenter()
+        self._initialize_delay()
         self._initialize_msg_label()
         self._initialize_footswitch_icon_labels()
         self._initialize_device_connection_label()
@@ -56,7 +58,7 @@ class View(ttk.Frame):
         self.scan_entry = Entry(
             self.entries_frame,
             textvariable=self.scan_value,
-            width=15,
+            width=13,
             validate="key",
         )
 
@@ -68,7 +70,7 @@ class View(ttk.Frame):
         self.animal_entry = Entry(
             self.entries_frame,
             textvariable=self.animal_value,
-            width=15,
+            width=13,
             validate="key",
         )
 
@@ -80,7 +82,19 @@ class View(ttk.Frame):
         self.experimenter_entry = Entry(
             self.entries_frame,
             textvariable=self.experimenter_value,
-            width=15,
+            width=7,
+            validate="key",
+        )
+
+    def _initialize_delay(self) -> None:
+        self.delay_label = ttk.Label(
+            self.entries_frame,
+            text="Delay:",
+        )
+        self.delay_entry = Entry(
+            self.entries_frame,
+            textvariable=self.delay_value,
+            width=7,
             validate="key",
         )
 
@@ -129,7 +143,7 @@ class View(ttk.Frame):
     def _initialize_sheet(self) -> None:
         self.sheet = tksheet.Sheet(
             self.sheet_frame,
-            width=550,
+            width=580,
             height=450,
             default_column_width=170,
         )
@@ -174,6 +188,8 @@ class View(ttk.Frame):
         self.animal_entry.grid(row=0, column=3, sticky="w", padx=5)
         self.experimenter_label.grid(row=0, column=4, sticky="e", padx=5)
         self.experimenter_entry.grid(row=0, column=5, sticky="w", padx=5)
+        self.delay_label.grid(row=0, column=6, sticky="e", padx=5)
+        self.delay_entry.grid(row=0, column=7, sticky="w", padx=5)
         self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
         self.session_start_text.grid(row=0, column=0, padx=5)
         self.session_start_label.grid(row=0, column=1, padx=5)
