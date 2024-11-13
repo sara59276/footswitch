@@ -7,6 +7,7 @@ from models.data import Data
 from models.metadata import Metadata
 from utils.file_utils import FileUtil
 from utils.footswitch_monitor import FootswitchMonitor
+from utils.string_utils import StringUtils
 from utils.time_util import TimeUtil
 from views.view_manager import ViewManager
 
@@ -122,16 +123,13 @@ class Presenter:
             self.__view.sheet_scroll_down()
 
     def validate_scan_and_animal_inputs(self, value) -> bool:
-        pattern = r'^[\w]+$'
-        return bool(re.fullmatch(pattern, value))
+        return StringUtils.is_filename_friendly_character(value)
 
     def validate_experimenter_input(self, value) -> bool:
-        pattern = r'^[A-Za-z]+$'
-        return bool(re.fullmatch(pattern, value))
+        return StringUtils.is_letter(value)
 
     def validate_delay_input(self, value) -> bool:
-        pattern = r'^\d+$'
-        return bool(re.fullmatch(pattern, value))
+        return StringUtils.is_digit(value)
 
     def on_sheet_modified(self, event) -> None:
         data = self.__view.get_sheet_content()

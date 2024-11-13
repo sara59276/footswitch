@@ -111,6 +111,10 @@ class ViewManager:
         self.__view.sheet.span(start_time_cell).data = [end_time]
 
     def set_sheet(self, data) -> None:
+        self._enable_user_cell_modification_event_column_only()
+        self.set_sheet_content(data)
+
+    def _enable_user_cell_modification_event_column_only(self):
         self.__view.sheet.readonly(
             self.__view.sheet.span(f"{ViewManager.START_TIME_COLUMN}:{ViewManager.END_TIME_COLUMN}"),
             readonly=True,
@@ -119,7 +123,6 @@ class ViewManager:
             self.__view.sheet.span("A1"),
             readonly=True,
         )
-        self.set_sheet_content(data)
 
     def set_sheet_content(self, data) -> None:
         self.__view.sheet.set_sheet_data(data)

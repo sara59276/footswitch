@@ -39,16 +39,22 @@ class View(ttk.Frame):
         self.session_times_frame = ttk.Frame(self)
 
     def _initialize_widgets(self) -> None:
+        self._initialize_entries()
+        self._initialize_msg_label()
+        self._initialize_device_connection()
+        self._initialize_sheet()
+        self._initialize_control_buttons()
+        self._initialize_session_times_labels()
+
+    def _initialize_entries(self) -> None:
         self._initialize_scan()
         self._initialize_animal()
         self._initialize_experimenter()
         self._initialize_delay()
-        self._initialize_msg_label()
+
+    def _initialize_device_connection(self) -> None:
         self._initialize_footswitch_icon_labels()
         self._initialize_device_connection_label()
-        self._initialize_sheet()
-        self._initialize_control_buttons()
-        self._initialize_session_times_labels()
 
     def _initialize_scan(self) -> None:
         self.scan_label = ttk.Label(
@@ -182,6 +188,14 @@ class View(ttk.Frame):
         self.control_frame.grid(row=3, column=1, padx=20, pady=20, sticky="ew")
 
     def _display_widgets(self) -> None:
+        self._display_entries()
+        self._display_device_connection()
+        self._display_msg()
+        self._display_sheet()
+        self._display_session_times()
+        self._display_control_buttons()
+
+    def _display_entries(self) -> None:
         self.scan_label.grid(row=0, column=0, sticky="e", padx=5)
         self.scan_entry.grid(row=0, column=1, sticky="w", padx=5)
         self.animal_label.grid(row=0, column=2, sticky="e", padx=5)
@@ -190,13 +204,23 @@ class View(ttk.Frame):
         self.experimenter_entry.grid(row=0, column=5, sticky="w", padx=5)
         self.delay_label.grid(row=0, column=6, sticky="e", padx=5)
         self.delay_entry.grid(row=0, column=7, sticky="w", padx=5)
+
+    def _display_device_connection(self) -> None:
+        self.device_connection_label.grid(row=0, column=1, sticky="ew", padx=5)
+
+    def _display_msg(self) -> None:
         self.msg_label.grid(row=0, column=0, sticky="ew", padx=5)
+
+    def _display_sheet(self) -> None:
+        self.sheet.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+    def _display_session_times(self) -> None:
         self.session_start_text.grid(row=0, column=0, padx=5)
         self.session_start_label.grid(row=0, column=1, padx=5)
         self.session_end_text.grid(row=1, column=0, padx=5)
         self.session_end_label.grid(row=1, column=1, padx=5)
-        self.sheet.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+    def _display_control_buttons(self) -> None:
         self.start_btn.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
         self.end_btn.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
         self.clear_btn.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
-        self.device_connection_label.grid(row=0, column=1, sticky="ew", padx=5)
