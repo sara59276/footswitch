@@ -17,7 +17,7 @@ class Repository(ABC):
         pass
 
     @abstractmethod
-    def set_data(self, filepath, data):
+    def overwrite_data(self, filepath, data):
         pass
 
 class FileRepository(Repository):
@@ -32,10 +32,10 @@ class FileRepository(Repository):
     def get_data(self, filepath) -> list[list[str]]:
         return self.__dao.get_data(filepath)
 
-    def set_data(self, filepath, data):
+    def overwrite_data(self, filepath, data):
         if data is None or len(data) == 0:
             raise RepositoryException("Data can't be empty")
-        self.__dao.set_data(filepath, data)
+        self.__dao.overwrite_data(filepath, data)
 
     def clear_data(self, filepath):
         self.__dao.clear_data(filepath)

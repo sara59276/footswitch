@@ -51,9 +51,9 @@ class Metadata:
         return self.__session_end
 
     def _update_repository(self, filepath):
-        self.__repo.overwrite_metadata(filepath, self._convert_to_csv())
+        self.__repo.overwrite_metadata(filepath, self._get_metadata_converted_for_csv())
 
-    def _convert_to_csv(self) -> List[List[str]]:
+    def _get_metadata_converted_for_csv(self) -> List[List[str]]:
         return [
             ['date<Y-m-d>', self.__date],
             ['session_start<H:M:S>', self.__session_start],

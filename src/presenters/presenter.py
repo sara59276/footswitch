@@ -69,6 +69,10 @@ class Presenter:
     def end_session(self) -> None:
         if self.__filepath:
             self.__metadata.set_session_end(self.__filepath)
+
+            # unoptimal but resolves data header bug, cf. github issue #2
+            self.__data.update(self.__filepath, self.__view.get_sheet_content())
+
         self.__view.deactivate_end_button()
         session_end_time = self.__metadata.get_session_end()
         self.__view.display_session_end(session_end_time)

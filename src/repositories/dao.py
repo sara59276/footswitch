@@ -13,7 +13,7 @@ class Dao(ABC):
         pass
 
     @abstractmethod
-    def set_data(self, filepath, data):
+    def overwrite_data(self, filepath, data):
         pass
 
     @abstractmethod
@@ -32,7 +32,7 @@ class FileDao(Dao):
     def get_data(self, filepath) -> list[list[str]]:
         return self._read(filepath, skip_rows=self.__class__.METADATA_ROWS_COUNT)
 
-    def set_data(self, filepath, content):
+    def overwrite_data(self, filepath, content):
         self._write(filepath, content, skip_rows=self.__class__.METADATA_ROWS_COUNT)
 
     def clear_data(self, filepath):
