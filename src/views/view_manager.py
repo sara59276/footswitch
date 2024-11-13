@@ -2,6 +2,7 @@ import tkinter
 from tkinter import ttk
 from tkinter.constants import NORMAL, DISABLED
 
+from utils.string_utils import StringUtils
 from views.view import View
 
 
@@ -54,13 +55,13 @@ class ViewManager:
         self.__view.end_btn.config(state=DISABLED)
 
     def get_user_inputs(self) -> tuple[str, str, str]:
-        if is_empty(self.__view.scan_value.get()):
+        if StringUtils.is_empty(self.__view.scan_value.get()):
             raise ValueError("Scan ID is empty")
-        if is_empty(self.__view.animal_value.get()):
+        if StringUtils.is_empty(self.__view.animal_value.get()):
             raise ValueError("Animal ID is empty")
-        if is_empty(self.__view.experimenter_value.get()):
+        if StringUtils.is_empty(self.__view.experimenter_value.get()):
             raise ValueError("Experimenter ID is empty")
-        if is_invalid_initials(self.__view.experimenter_value.get()):
+        if StringUtils.is_invalid_initials(self.__view.experimenter_value.get()):
             raise ValueError("Experimenter initials should be of length 2 to 3")
 
         return (self.__view.scan_value.get(),
@@ -168,10 +169,3 @@ class ViewManager:
         style = ttk.Style()
         style.configure("Red.TLabel", foreground="red")
         style.configure("Green.TLabel", foreground="green")
-
-# TODO - in another class ?
-def is_empty(string: str) -> bool:
-    return True if len(string) == 0 else False
-
-def is_invalid_initials(string: str) -> bool:
-    return not (2 <= len(string) <= 3)
