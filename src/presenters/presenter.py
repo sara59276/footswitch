@@ -70,7 +70,6 @@ class Presenter:
         if self.__filepath:
             self.__metadata.set_session_end(self.__filepath)
         self.__view.deactivate_end_button()
-        self.__view.pop_empty_row_in_sheet()
         session_end_time = self.__metadata.get_session_end()
         self.__view.display_session_end(session_end_time)
         self.__has_session_started = False
@@ -116,8 +115,6 @@ class Presenter:
 
             updated_data = self.__view.get_sheet_content()
             self.__data.update(self.__filepath, updated_data)
-
-            self.__view.append_empty_row_to_sheet()
             self.__view.sheet_scroll_down()
 
     def validate_scan_and_animal_inputs(self, value) -> bool:

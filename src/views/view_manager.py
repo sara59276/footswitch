@@ -6,6 +6,11 @@ from views.view import View
 
 
 class ViewManager:
+
+    EVENT_COLUMN = "A"
+    START_TIME_COLUMN = "B"
+    END_TIME_COLUMN = "C"
+
     def __init__(self, view: View):
         self.__view = view
         self._initialize_styles()
@@ -85,20 +90,18 @@ class ViewManager:
         self.__view.session_end_value.set(session_end)
 
     def add_start_time(self, start_time):
-        start_time_col = "B"
-        last_row_index = self.__view.sheet.get_total_rows()
-        start_time_cell = f"{start_time_col}{last_row_index}"
+        appended_row_index = self.__view.sheet.get_total_rows() + 1
+        start_time_cell = f"{ViewManager.START_TIME_COLUMN}{appended_row_index}"
         self.__view.sheet.span(start_time_cell).data = [start_time]
 
     def add_end_time(self, end_time):
-        end_time_col = "C"
         last_row_index = self.__view.sheet.get_total_rows()
-        start_time_cell = f"{end_time_col}{last_row_index}"
+        start_time_cell = f"{ViewManager.END_TIME_COLUMN}{last_row_index}"
         self.__view.sheet.span(start_time_cell).data = [end_time]
 
     def set_sheet(self, data) -> None:
         self.__view.sheet.readonly(
-            self.__view.sheet.span("B:C"),
+            self.__view.sheet.span(f"{ViewManager.START_TIME_COLUMN}:{ViewManager.END_TIME_COLUMN}"),
             readonly=True,
         )
         self.__view.sheet.readonly(
@@ -109,24 +112,9 @@ class ViewManager:
 
     def set_sheet_content(self, data) -> None:
         self.__view.sheet.set_sheet_data(data)
-        self.append_empty_row_to_sheet()
 
     def get_sheet_content(self) -> object:
         return self.__view.sheet.data
-
-    def append_empty_row_to_sheet(self) -> None:
-        if self._is_sheet_populated():
-            self.__view.sheet.insert_row()
-
-    def pop_empty_row_in_sheet(self) -> None:
-        if self._is_sheet_populated():
-            last_row_idx = self.__view.sheet.get_total_rows()
-            last_row_data = self.__view.sheet.get_row_data(last_row_idx)
-
-            if all(cell in (None, "", " ") or (isinstance(cell, str) and cell.isspace()) for cell in last_row_data):
-                self.__view.sheet.del_row(idx=last_row_idx)
-            else:
-                raise Exception("Trying to delete non empty row !")
 
     def _is_sheet_populated(self) -> bool:
         return self.__view.sheet.get_total_rows() > 0 and self.__view.sheet.get_total_columns() > 0
@@ -170,8 +158,8 @@ class ViewManager:
         self.__view.sheet.reset()
 
     def sheet_contains_empty_events(self) -> bool:
-        events_column = self.__view.sheet["A"].data
-        return any(cell in (None, "") or (isinstance(cell, str) and cell.isspace()) for cell in events_column[1:-1])
+        events_column = self.__view.sheet[ViewManager.EVENT_COLUMN].data
+        return any(cell in (None, "") or (isinstance(cell, str) and cell.isspace()) for cell in events_column[1:])
 
     def get_root(self):
         return self.__view.get_root()
