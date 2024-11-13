@@ -8,7 +8,7 @@
 - [In case you want to use another FootSwitch device](#in-case-you-want-to-use-another-footswitch-device)
 - [How to configure a valid macro for the FootSwitch on PCSensor customization software ElfKey](#how-to-configure-a-valid-macro-for-the-footswitch-on-pcsensor-customization-software-elfkey)
 - [How to generate the executable](#how-to-generate-the-executable)
-- [How to update requirements.txt](#how-to-update-requirementstxt)
+- [How to update requirements.txt](#how-to-update-the-requirements.txt-file)
 
 ## Author
 
@@ -50,7 +50,7 @@ in `src/resources/config/config.ini` file are the same.
 
 ![plot](./img/FootSwitch_Macro_NO.png)
 
-## How to update the requirements.txt
+## How to update the requirements.txt file
 ```
 .\.venv\Scripts\activate
 pip freeze > requirements.txt
