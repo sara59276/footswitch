@@ -49,23 +49,24 @@ class Presenter:
             self._update_data()
 
             if self.__filepath:
-                self.__view.display_success(f"File created: {self.__filepath}") # TODO bug - never displayed
-            else:
-                raise FileNotFoundError(f"Error: File not created")
-
-            self.__view.clear_msg()
-            self.__view.disable_user_inputs()
-            self.__view.deactivate_start_button()
-            self.__view.activate_end_button()
-            session_start_time = self.__metadata.get_session_start()
-            self.__view.display_session_start(session_start_time)
-            self.__has_session_started = True
+                self.__view.clear_msg()
+                filename = FileUtil.get_filename(self.__filepath)
+                folder = FileUtil.get_folder(self.__filepath)
+                self.__view.display_success(f"File name: {filename}"
+                                            f"\nSaved in folder: {folder}"
+                                            f"\n(All changes are automatically saved)")
+                self.__view.disable_user_inputs()
+                self.__view.deactivate_start_button()
+                self.__view.activate_end_button()
+                session_start_time = self.__metadata.get_session_start()
+                self.__view.display_session_start(session_start_time)
+                self.__has_session_started = True
 
         except (FileExistsError, FileNotFoundError, ValueError) as e:
-            self.__view.display_error(str(e))
-            # raise
+            self.__view.display_error(f"{e}")
+            raise
         except Exception as e:
-            self.__view.display_error(str(e))
+            self.__view.display_error(f"Unhandled error: {e}")
             raise
 
     def end_session(self) -> None:

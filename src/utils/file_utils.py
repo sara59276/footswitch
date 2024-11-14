@@ -23,7 +23,10 @@ class FileUtil:
                 pass
             print(f"File created at: {filepath}")
         else:
-            raise FileExistsError(f"File already exists: {filepath}")
+            filename = FileUtil.get_filename(filepath)
+            folder = FileUtil.get_folder(filepath)
+            raise FileExistsError(f"This file already exists: {filename}"
+                                  f"\nIn folder: {folder}")
 
         return filepath
 
@@ -59,3 +62,11 @@ class FileUtil:
             project_root = APP_DIRECTORY
 
         return project_root
+
+    @staticmethod
+    def get_folder(filepath: str) -> str:
+        return os.path.dirname(filepath)
+
+    @staticmethod
+    def get_filename(filepath: str) -> str:
+        return os.path.basename(filepath)
