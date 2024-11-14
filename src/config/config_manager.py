@@ -24,7 +24,6 @@ class ConfigManager:
         config.read(self.FILE)
 
         app_name = config.get('General', 'app_name')
-        app_version = config.get('General', 'app_version')
         app_author = config.get('General', 'app_author')
         footswitch_vendor_id = config.get('Device', 'footswitch_vendor_id')
         footswitch_model_id = config.get('Device', 'footswitch_model_id')
@@ -32,7 +31,6 @@ class ConfigManager:
 
         self._config_values = {
             'app_name': app_name,
-            'app_version': app_version,
             'app_author': app_author,
             'footswitch_vendor_id': footswitch_vendor_id,
             'footswitch_model_id': footswitch_model_id,
