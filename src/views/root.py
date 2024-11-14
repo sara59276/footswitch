@@ -19,7 +19,7 @@ class Root(Tk):
         self.title(APP_TITLE)
 
     def _set_window_icon(self) -> None:
-        window_icon = PhotoImage(file=ImageUtil.get_filepath("app_icon.png"))
+        window_icon = PhotoImage(file=ImageUtil.get_path("app_icon.png"))
         self.iconphoto(False, window_icon)
 
     def _configure_grid(self) -> None:

@@ -1,14 +1,14 @@
 import configparser
 import os
 
-from constants.app_directory import APP_DIRECTORY
+from utils.file_utils import FileUtil
 
 
 class ConfigManager:
     """
-    Singleton class # TODO keep it so ?
+    Singleton class
     """
-    FILE = os.path.join(APP_DIRECTORY, 'resources', 'config', 'config.ini')
+    FILE = os.path.join(FileUtil.get_project_root(), 'resources', 'config', 'config.ini')
 
     _instance = None
     _config_values = None

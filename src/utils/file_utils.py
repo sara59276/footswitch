@@ -1,8 +1,12 @@
 import csv
 import os
 import platform
+import sys
 from os.path import normpath
+from pathlib import Path
 from stat import S_IREAD
+
+from constants.app_directory import APP_DIRECTORY
 
 
 class FileUtil:
@@ -46,3 +50,12 @@ class FileUtil:
                 file.readline()
             writer = csv.writer(file, dialect=csv.excel, lineterminator="\n",)
             writer.writerows(content)
+
+    @staticmethod
+    def get_project_root():
+        if getattr(sys, 'frozen', False):
+            project_root = Path(getattr(sys, '_MEIPASS', ''))
+        else:
+            project_root = APP_DIRECTORY
+
+        return project_root
