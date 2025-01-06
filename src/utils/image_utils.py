@@ -9,7 +9,7 @@ class ImageUtil:
 
     @staticmethod
     def get_path(image_name: str) -> Path:
-        path = FileUtil.get_project_root() / 'resources' / 'images' / image_name
+        path = FileUtil.get_project_root() / 'resources' / 'img' / image_name
 
         if not path.exists():
             raise FileNotFoundError(f"The file '{path}' does not exist.")
