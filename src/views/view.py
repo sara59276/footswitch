@@ -110,7 +110,7 @@ class View(ttk.Frame):
             self.device_connection_frame,
             image=self.fs_released_icon
         )
-        self.fs_pressed_icon = ImageUtil.get_image("footswitch_pressed_icon.png")
+        self.fs_pressed_icon = ImageUtil.get_image("footswitch_icon_pressed.png")
         self.fs_pressed_icon_label = ttk.Label(
             self.device_connection_frame,
             image=self.fs_pressed_icon

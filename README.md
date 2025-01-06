@@ -45,9 +45,9 @@ Optional: mark the `src` directory as sources root.
 3. Make sure that both the key configured in the FootSwitch device and the `footswitch_key` 
 in `src/resources/config/config.ini` file are the same.
 
-![plot](./resources/img/FootSwitch_Macro_YES.png)
+![plot](./resources/img/footswitch_macro_correct.png)
 
-![plot](./resources/img/FootSwitch_Macro_NO.png)
+![plot](./resources/img/footswitch_macro_incorrect.png)
 
 ## How to generate the executable
 ```
