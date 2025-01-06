@@ -8,7 +8,6 @@
 - [In case you want to use another FootSwitch device](#in-case-you-want-to-use-another-footswitch-device)
 - [How to configure a valid macro for the FootSwitch on PCSensor customization software ElfKey](#how-to-configure-a-valid-macro-for-the-footswitch-on-pcsensor-customization-software-elfkey)
 - [How to generate the executable](#how-to-generate-the-executable)
-- [How to update requirements.txt](#how-to-update-the-requirements.txt-file)
 
 ## Author
 
@@ -23,7 +22,7 @@ application ensures efficient and accurate recording of events.
 
 ## How to clone the repo
 
-Firstly, run the following commands:
+Run the following commands:
 ```
 git clone https://github.com/sara59276/FootSwitch.git
 cd FootSwitch
@@ -32,7 +31,7 @@ virtualenv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
 ```
-Lastly, mark the `src` directory as sources root.
+Optional: mark the `src` directory as sources root.
 
 ## In case you want to use another FootSwitch device
 
@@ -50,11 +49,6 @@ in `src/resources/config/config.ini` file are the same.
 
 ![plot](./img/FootSwitch_Macro_NO.png)
 
-## How to update the requirements.txt file
-```
-.\.venv\Scripts\activate
-pip freeze > requirements.txt
-```
 ## How to generate the executable
 ```
 pip install pyinstaller
