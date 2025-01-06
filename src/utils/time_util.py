@@ -21,12 +21,18 @@ class TimeUtil:
         return datetime.now().time()
 
     @staticmethod
-    def get_formatted_current_time(time_format: str = "%H:%M:%S.%f", msec_digits: int = 2) -> str:
+    def get_formatted_current_time(
+            time_format: str = "%H:%M:%S.%f",
+            msec_digits: int = 2,
+    ) -> str:
         current_time = TimeUtil.get_current_time()
         return TimeUtil.format_time(current_time, time_format, msec_digits)
 
     @staticmethod
-    def get_midpoint_time(start_datetime: datetime, end_datetime: datetime) -> time:
+    def get_midpoint_time(
+            start_datetime: datetime,
+            end_datetime: datetime,
+    ) -> time:
         return (start_datetime + (end_datetime - start_datetime) / 2).time()
 
     @staticmethod
@@ -35,7 +41,11 @@ class TimeUtil:
         return TimeUtil.format_time(midpoint_time)
 
     @staticmethod
-    def format_time(time_obj: time, time_format: str = "%H:%M:%S.%f", msec_digits: int = 2) -> str:
+    def format_time(
+            time_obj: time,
+            time_format: str = "%H:%M:%S.%f",
+            msec_digits: int = 2,
+    ) -> str:
         if not 0 <= msec_digits <= 6:
             raise ValueError("msec_digits must be between 0 and 6")
 
