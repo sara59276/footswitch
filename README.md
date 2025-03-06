@@ -52,5 +52,5 @@ in `src/resources/config/config.ini` file are the same.
 ## How to generate the executable
 ```
 pip install pyinstaller
-pyinstaller.exe --noconsole --onefile --name FootSwitch_App_v1.3.4 --icon=resources/images/app_icon.png --add-data "resources/images;resources/images" --add-data "resources/config/config.ini;resources/config" .\src\main.py
+pyinstaller.exe --noconsole --onefile --name FootSwitch_App --icon=resources/img/app_icon.png --add-data "resources/img;resources/img" --add-data "resources/config/config.ini;resources/config" .\src\main.py
 ```
